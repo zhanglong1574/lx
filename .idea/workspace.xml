@@ -55,6 +55,8 @@
       <workItem from="1580720813678" duration="7694000" />
       <workItem from="1618966073556" duration="2317000" />
       <workItem from="1618969381322" duration="2167000" />
+      <workItem from="1618986974502" duration="3068000" />
+      <workItem from="1618990429967" duration="200000" />
     </task>
     <servers />
   </component>
@@ -62,13 +64,41 @@
     <option name="version" value="2" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="977" y="566" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1618987393634">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="977" y="566" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1080@0.0.1920.1080" timestamp="1618987393634" />
     <state x="1175" y="312" key="FileChooserDialogImpl" timestamp="1618969216308">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="1175" y="312" key="FileChooserDialogImpl/0.0.1920.1080@0.0.1920.1080" timestamp="1618969216308" />
-    <state x="859" y="220" key="SettingsEditor" timestamp="1618969252105">
+    <state x="859" y="220" key="SettingsEditor" timestamp="1618990630113">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="859" y="220" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1618969252105" />
+    <state x="859" y="220" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1618990630113" />
+    <state x="789" y="506" width="774" height="480" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog" timestamp="1618987714763">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="789" y="506" width="774" height="480" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1618987714763" />
+    <state x="831" y="526" width="774" height="480" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1618988610970">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="831" y="526" width="774" height="480" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1618988610970" />
+    <state x="831" y="526" width="774" height="480" key="com.intellij.history.integration.ui.views.SelectionHistoryDialog" timestamp="1618988610971">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="831" y="526" width="774" height="480" key="com.intellij.history.integration.ui.views.SelectionHistoryDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1618988610971" />
+    <state x="1031" y="562" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1618987322727">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="1031" y="562" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1080@0.0.1920.1080" timestamp="1618987322727" />
+    <state x="616" y="250" key="run.anything.popup" timestamp="1618990494438">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="616" y="250" key="run.anything.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1618990494438" />
+    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1618990497512">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1618990497512" />
   </component>
 </project>
