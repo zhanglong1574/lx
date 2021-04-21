@@ -1,0 +1,292 @@
+package com.flyroc.ox_online.project.biz.order.domain;
+
+import com.flyroc.ox_online.framework.aspectj.lang.annotation.Excel;
+import com.flyroc.ox_online.framework.web.domain.BaseEntity;
+
+import javax.xml.crypto.Data;
+
+public class Order extends BaseEntity {
+    private static final long serialVersionUID = 1L;
+
+    /** 岗位序号 */
+    @Excel(name = "订单号")
+    private String order_num;
+
+    /** 岗位序号 */
+    @Excel(name = "用户id")
+    private String use_id;
+
+    /** 岗位序号 */
+    @Excel(name = "联系电话")
+    private String user_phone;
+
+    /** 岗位序号 */
+    @Excel(name = "用户姓名")
+    private String user_name;
+
+    /** 岗位序号 */
+    @Excel(name = "商品id")
+    private String ox_id;
+
+    /** 岗位序号 */
+    @Excel(name = "数量")
+    private String amount;
+
+    /** 岗位序号 */
+    @Excel(name = "商品价格")
+    private double ox_price;
+
+    /** 岗位序号 */
+    @Excel(name = "折扣")
+    private String discount;
+
+    /** 岗位序号 */
+    @Excel(name = "实付金额")
+    private double real_pay;
+
+    /** 岗位序号 */
+    @Excel(name = "订单状态")
+    private String order_status;
+
+    /** 岗位序号 */
+    @Excel(name = "下单时间")
+    private String order_time;
+
+    /** 岗位序号 */
+    @Excel(name = "期望时间")
+    private String ecpect_time;
+
+    /** 岗位序号 */
+    @Excel(name = "确认订单时间")
+    private String delivery_time;
+
+    /** 岗位序号 */
+    @Excel(name = "预约业务员")
+    private String opt_ready_user;
+
+    /** 岗位序号 */
+    @Excel(name = "预定时间")
+    private String reserve_time;
+
+    /** 岗位序号 */
+    @Excel(name = "付定金时间")
+    private String pay_time;
+
+    /** 岗位序号 */
+    @Excel(name = "成交过户时间")
+    private String receiving_time;
+
+    /** 岗位序号 */
+    @Excel(name = "过户业务员ID")
+    private String opt_finish_user;
+
+    /** 岗位序号 */
+    @Excel(name = "交易关闭时间")
+    private String close_time;
+
+    /** 岗位序号 */
+    @Excel(name = "预约说明")
+    private String reserve_remark;
+
+    /** 岗位序号 */
+    @Excel(name = "备注")
+    private String remark;
+
+    /** 岗位序号 */
+    @Excel(name = "收货地址")
+    private String shipping_address;
+
+    /** 岗位序号 */
+    @Excel(name = "快递单号")
+    private String courier_num;
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getOrder_num() {
+        return order_num;
+    }
+
+    public void setOrder_num(String order_num) {
+        this.order_num = order_num;
+    }
+
+    public String getUse_id() {
+        return use_id;
+    }
+
+    public void setUse_id(String use_id) {
+        this.use_id = use_id;
+    }
+
+    public String getUser_phone() {
+        return user_phone;
+    }
+
+    public void setUser_phone(String user_phone) {
+        this.user_phone = user_phone;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public String getOx_id() {
+        return ox_id;
+    }
+
+    public void setOx_id(String ox_id) {
+        this.ox_id = ox_id;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    public double getOx_price() {
+        return ox_price;
+    }
+
+    public void setOx_price(double ox_price) {
+        this.ox_price = ox_price;
+    }
+
+    public String getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(String discount) {
+        this.discount = discount;
+    }
+
+    public double getReal_pay() {
+        return real_pay;
+    }
+
+    public void setReal_pay(double real_pay) {
+        this.real_pay = real_pay;
+    }
+
+    public String getOrder_status() {
+        return order_status;
+    }
+
+    public void setOrder_status(String order_status) {
+        this.order_status = order_status;
+    }
+
+    public String getOrder_time() {
+        return order_time;
+    }
+
+    public void setOrder_time(String order_time) {
+        this.order_time = order_time;
+    }
+
+    public String getEcpect_time() {
+        return ecpect_time;
+    }
+
+    public void setEcpect_time(String ecpect_time) {
+        this.ecpect_time = ecpect_time;
+    }
+
+    public String getDelivery_time() {
+        return delivery_time;
+    }
+
+    public void setDelivery_time(String delivery_time) {
+        this.delivery_time = delivery_time;
+    }
+
+    public String getOpt_ready_user() {
+        return opt_ready_user;
+    }
+
+    public void setOpt_ready_user(String opt_ready_user) {
+        this.opt_ready_user = opt_ready_user;
+    }
+
+    public String getReserve_time() {
+        return reserve_time;
+    }
+
+    public void setReserve_time(String reserve_time) {
+        this.reserve_time = reserve_time;
+    }
+
+    public String getPay_time() {
+        return pay_time;
+    }
+
+    public void setPay_time(String pay_time) {
+        this.pay_time = pay_time;
+    }
+
+    public String getReceiving_time() {
+        return receiving_time;
+    }
+
+    public void setReceiving_time(String receiving_time) {
+        this.receiving_time = receiving_time;
+    }
+
+    public String getOpt_finish_user() {
+        return opt_finish_user;
+    }
+
+    public void setOpt_finish_user(String opt_finish_user) {
+        this.opt_finish_user = opt_finish_user;
+    }
+
+    public String getClose_time() {
+        return close_time;
+    }
+
+    public void setClose_time(String close_time) {
+        this.close_time = close_time;
+    }
+
+    public String getReserve_remark() {
+        return reserve_remark;
+    }
+
+    public void setReserve_remark(String reserve_remark) {
+        this.reserve_remark = reserve_remark;
+    }
+
+    @Override
+    public String getRemark() {
+        return remark;
+    }
+
+    @Override
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getShipping_address() {
+        return shipping_address;
+    }
+
+    public void setShipping_address(String shipping_address) {
+        this.shipping_address = shipping_address;
+    }
+
+    public String getCourier_num() {
+        return courier_num;
+    }
+
+    public void setCourier_num(String courier_num) {
+        this.courier_num = courier_num;
+    }
+}

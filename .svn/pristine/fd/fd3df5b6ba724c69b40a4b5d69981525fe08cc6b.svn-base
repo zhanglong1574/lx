@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:include="include :: header('黄牛管理审核')" />
+</head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<form class="form-horizontal m" id="form-oxMarket-add">
+			<input name="user_id" id="user_id" type="hidden">
+			<div class="form-group">
+				<label class="col-sm-3 control-label">店铺名：</label>
+				<div class="col-sm-8">
+					<input type="text" name="hy_name" id="hy_name" class="form-control">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">所在地：</label>
+				<div class="col-sm-8">
+					<input type="text" name="store_address" id="store_address"
+						class="form-control" disabled="disabled">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">农村详细地址：</label>
+				<div class="col-sm-8">
+					<input type="text" name="farm_address" id="farm_address"
+						class="form-control">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">店铺电话：</label>
+				<div class="col-sm-8">
+					<input type="text" name="store_tel" id="store_tel"
+						class="form-control">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">店铺状态：</label>
+				<div class="col-sm-8">
+					<input type="text" name="store_state" id="store_state"
+						class="form-control" disabled="disabled">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">logo图片：</label>
+				<div class="col-sm-8">
+					<div class="fileinput fileinput-new" data-provides="fileinput">
+						<div class="fileinput-new thumbnail"
+							style="width: 140px; height: 140px;">
+							<img src="" id="logo_url" style="height: 100%;">
+						</div>
+						<div class="fileinput-preview fileinput-exists thumbnail"
+							style="max-width: 200px; max-height: 150px;"></div>
+						<div>
+							<span class="btn btn-white btn-file">
+								<span class="fileinput-new">选择图片</span>
+								<span class="fileinput-exists">更改</span>
+								<input type="file" onchange="uploadPic(this)">
+							</span>
+							<a href="#" class="btn btn-white fileinput-exists" data-dismiss="fileinput">清除</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">登录名：</label>
+				<div class="col-sm-8">
+					<input type="text" name="login_name" id="login_name"
+						class="form-control">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">身份标识：</label>
+				<div class="col-sm-8">
+					<input type="text" name="create_user" id="create_user"
+						class="form-control" disabled="disabled">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">审核人：</label>
+				<div class="col-sm-8">
+					<input type="text" name="storeState" id="storeState"
+						class="form-control" disabled="disabled">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">是否冻结：</label>
+				<div class="col-sm-8" id="is_freeze">
+					<input type="radio" name="is_freeze" class="is_freeze" value="是">是
+					<input type="radio" name="is_freeze" class="is_freeze" value="否">否
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">农村规模：</label>
+				<div class="col-sm-8">
+					<select name="farm_size" id="farm_size">
+
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">服务中心：</label>
+				<div class="col-sm-8">
+					<select name="service_center" id="service_center">
+
+					</select>
+				</div>
+			</div>
+		</form>
+	</div>
+	<th:block th:include="include :: footer" />
+	<th:block th:include="include :: jasny-bootstrap-css" />
+	<th:block th:include="include :: jasny-bootstrap-js" />
+	<script type="text/javascript">
+		var i = "";
+		var prefix = ctx + "biz/store"
+		$("#form-oxMarket-add").validate({
+			focusCleanup : true
+		});
+
+		function submitHandler() {
+			
+			var user_id = $("#user_id").val();
+			var hy_name = $("#hy_name").val();
+			var farm_address = $("#farm_address").val();
+			var store_tel = $("#store_tel").val();
+			var logo_url = i;
+			var login_name = $("#login_name").val();
+			var is_freeze = $('input[name="is_freeze"]:checked').val();
+			var farm_size = $("#farm_size option:selected").val();
+			var service_center = $("#service_center option:selected").val();
+			
+			if(hy_name == null || hy_name.length == "" ||
+					hy_name.length > 125 || hy_name.length <= 0){
+				alert("店铺名输入有误！！");
+				return;
+			}
+			if(farm_address.length > 500){
+				alert("农场详细地址最多输入500个字");
+				return;
+			}
+			if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(store_tel))){ 
+			   alert("手机号码有误，请重填");  
+			    return false; 
+			}
+			if(login_name.length > 50){
+				alert("登录名最多输入50个字");
+				return;
+			}
+			
+			$.ajax({
+				url : prefix + "/xgsh",
+				type : "POST",
+				async : true,
+				dataType : "json",
+				data : {"user_id":user_id, "hy_name":hy_name,
+						"farm_address":farm_address, "store_tel":store_tel,
+						"logo_url":logo_url, "login_name":login_name, 
+						"is_freeze":is_freeze, "farm_size":farm_size, 
+						"service_center":service_center,},
+
+				success : function(msg) {
+					if(msg.a == 1){
+						parent.sss(msg.a);
+						var index = parent.layer.getFrameIndex(window.name);
+						parent.layer.close(index);
+					}else{
+						alert("出现未知错误请联系管理员！！");
+					}
+				}
+			});
+			
+		}
+		
+
+		$(function() {
+			$.ajax({
+						url : prefix + "/gs",
+						type : "POST",
+						async : true,
+						dataType : "json",
+						data : {},
+
+						success : function(msg) {
+							var s = '[[${list.farm_size}]]';
+							var str = "<option value='' selected='selected'>请选择</option>";
+							if (msg.size != null) {
+								for (var i = 0; i < msg.size.length; i++) {
+									if(msg.size[i] != null && msg.size[i].farmSize != ""){
+										if (msg.size[i].farmSize == s.replace("&lt;", "<") || msg.size[i].farmSize == s.replace("&gt;", ">")) {
+												str += "<option value='"+msg.size[i].farmSize+"' selected='selected'>"
+												+ msg.size[i].farmSize + "</option>";
+										}else{
+												str += "<option value='"+msg.size[i].farmSize+"'>"
+												+ msg.size[i].farmSize + "</option>";
+										}
+									}
+									
+									
+								}
+							}
+							$("#farm_size").html(str);
+							var str = "<option value='' selected='selected'>请选择</option>";
+							if (msg.Center != null) {
+								for (var i = 0; i < msg.Center.length; i++) {
+									if(msg.Center[i] != null && msg.Center[i].service_center != ""){
+										if (msg.Center[i].service_center == "[[${list.service_center}]]") {
+											str += "<option value='"+msg.Center[i].id+"' selected='selected'>"
+											+ msg.Center[i].service_center + "</option>";
+										}else{
+											str += "<option value='"+msg.Center[i].id+"'>"
+											+ msg.Center[i].service_center + "</option>";
+										}
+									}
+								}
+							}
+							$("#service_center").html(str);
+						}
+					});
+
+			$("#user_id").val('[[${list.user_id}]]');
+			$("#hy_name").val('[[${list.hy_name}]]');
+			$("#store_address").val('[[${list.store_address}]]');
+			$("#farm_address").val('[[${list.farm_address}]]');
+			$("#store_tel").val('[[${list.store_tel}]]');
+			$("#store_state").val('[[${list.store_state}]]');
+			if ('[[${list.store_state}]]' == "通过") {
+				$("#storeState").val("认证商家");
+			} else {
+				$("#storeState").val("未认证商家");
+			}
+			$("#logo_url").attr("src", "/"+'[[${list.logo_url}]]');
+			$("#login_name").val('[[${list.login_name}]]');
+			$("#create_user").val('[[${list.create_user}]]');
+
+			var rObj = document.getElementsByName("is_freeze");
+			for (var i = 0; i < rObj.length; i++) {
+				if (rObj[i].value == '[[${list.is_freeze}]]') {
+					rObj[i].checked = 'checked';
+				}
+			}
+		})
+		
+		
+        // 为表单绑定异步上传的事件
+        function uploadPic(obj) {    // img1：img标签的id,点击事件传过来的值  obj：上传文件的input标签，点击事件传过来的this
+            var img11 = $("#logo_url");  //获取img标签
+            var file = $(obj);  //获取input文件上传input标签
+            var explore = /.jpg$|.gif$|.png$|.bmp$/;  //设置文件格式
+            if (explore.exec(file.val()) == null) {
+                alert("图片格式不正确");
+                return false;
+            }
+            var reader = new FileReader();    //新建FileReader对象
+            reader.readAsDataURL(file.get(0).files[0]);  //读取文件
+            // reader.onloadstart = function () {   //展示图片开始前的函数
+            // alert("开始展示时间");
+            // }
+            //reader.onload = function () {  //展示文件函数，将路径赋值给img标签的src
+            //    img11.prop("src", reader.result);
+            //}
+            var formData = new FormData();  //新建一个FormData对象
+            formData.append("file", file.get(0).files[0]);  //封装formData，根据键值对的形式进行封装
+            formData.append("imgsrc", img11.attr("src"));  //将当前页面的img标签的src值封装到formdata中，由于本人项目中要使用该路径实现对修改前的文件进行删除
+            $.ajax({
+                url: prefix + "/file",    //此处填写ajax的请求方法
+                type: 'POST',
+                contentType: false,  //注意上传文件必须关闭这些，
+                data: formData,
+                processData: false,  // 还有这些
+                dataType: 'json',  //返回值，视自己情况而定。返回提示信息
+                success: function (data) {
+                    i = data.i;
+                    file.attr("title",i);
+                    img11.attr("src", i);
+                },
+                error: function (data) {
+                    alert("failed");
+                }
+            })
+        }
+        
+		
+		
+	</script>
+</body>
+</html>

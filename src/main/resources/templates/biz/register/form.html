@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <th:block th:include="include :: header('进出牛市')"/>
+</head>
+<body>
+<div class="col-sm-6" style=" width: 100%;">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+<!--            <h5>入市人数、牛数统计图</h5>-->
+        </div>
+        <div class="ibox-content">
+
+            <div class="echarts" id="echarts-bar-chart"></div>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: echarts-js"/>
+<script th:inline="javascript">
+
+    var barChart = echarts.init(document.getElementById("echarts-bar-chart"));
+    var baroption = {
+        title: {
+            text: '入市人数、牛数统计'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['入市人数', '入市牛数']
+        },
+        grid: {
+            x: 30,
+            x2: 40,
+            y2: 24
+        },
+        calculable: true,
+        xAxis: [
+            {
+                type: 'category',
+                data: /*[[${time}]]*/ 'Sebastian'
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value'
+            }
+        ],
+        series: [
+            {
+                name: '入市人数',
+                type: 'bar',
+                data: /*[[${count}]]*/ 'Sebastian',
+                markPoint: {
+                    data: [
+                        {
+                            name: '最高',
+                            value: /*[[${ax}]]*/ 'Sebastian',
+                            xAxis: /*[[${max}]]*/ 'Sebastian',
+                            yAxis: /*[[${ax}]]*/ 'Sebastian' + 1
+                        },
+                        {
+                            name: '最低',
+                            value: /*[[${in}]]*/ 'Sebastian',
+                            xAxis: /*[[${min}]]*/ 'Sebastian',
+                            yAxis: /*[[${in}]]*/ 'Sebastian' + 1
+                        }
+                    ]
+                },
+            },
+            {
+                name: '入市牛数',
+                type: 'bar',
+                data: /*[[${count1}]]*/ 'Sebastian',
+                markPoint: {
+                    data: [
+                        {
+                            name: '最高',
+                            value: /*[[${ax1}]]*/ 'Sebastian',
+                            xAxis: /*[[${max1}]]*/ 'Sebastian',
+                            yAxis: /*[[${ax1}]]*/ 'Sebastian' + 1
+                        },
+                        {
+                            name: '最低',
+                            value: /*[[${in1}]]*/ 'Sebastian',
+                            xAxis: /*[[${min1}]]*/ 'Sebastian',
+                            yAxis: /*[[${in1}]]*/ 'Sebastian' + 1
+                        }
+                    ]
+                },
+            }
+        ]
+    };
+    barChart.setOption(baroption);
+
+    window.onresize = barChart.resize;
+</script>
+</body>
+</html>

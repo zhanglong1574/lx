@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.flyroc.ox_online.project.biz.exChange.mapper.ExchangeMapper">
+
+	<!-- 交易大厅显示 -->
+	<select id="selectAllExchange" resultType="java.util.Map">
+		SELECT
+		hy_store.user_id AS stus,
+		hy_name,
+		store_ower,
+		hy_store.store_tel,
+		sum( hy_varieties_record.num ) AS sumhy,
+		hy_markets.create_time AS date
+		FROM
+		(select * from hy_market where (hy_market.user_imports = '1' or
+		hy_market.user_imports = '3') <![CDATA[ AND hy_market.create_time < #{date} AND hy_market.create_time > #{opt}  ]]>)
+		as hy_markets
+		LEFT JOIN hy_store ON hy_markets.user_id = hy_store.user_id
+		LEFT JOIN hy_varieties_record ON hy_markets.deal_id =
+		hy_varieties_record.deal_id
+		GROUP BY
+		hy_store.user_id
+		having
+		1 = 1
+		<if test="store_tel != null and store_tel != ''">
+			<bind name="store_tel" value="'%'+store_tel+'%'" />
+			AND store_tel LIKE #{store_tel}
+		</if>
+		<if test="store_ower != null and store_ower != ''">
+			<bind name="store_ower" value="'%'+store_ower+'%'" />
+			AND store_ower LIKE #{store_ower}
+		</if>
+
+
+	</select>
+
+	<!-- 汇总人数 -->
+	<select id="selectCount1" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT
+		IfNULL(count( DISTINCT user_id ),0) AS usernum
+		FROM
+		hy_varieties_record
+		RIGHT JOIN hy_market ON hy_market.deal_id = hy_varieties_record.deal_id
+		LEFT JOIN hy_varieties ON hy_varieties_record.varieties_id =
+		hy_varieties.varieties_id
+		WHERE
+		hy_market.create_time > #{newTime1} 
+			<![CDATA[ AND hy_market.create_time < #{newTime2} ; ]]>
+	</select>
+	<!-- 汇总进场 -->
+	<select id="selectCount2" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT
+		IfNULL(sum( hy_varieties_record.num ),0) AS vrnum
+		FROM
+		hy_varieties_record
+		RIGHT JOIN hy_market ON hy_market.deal_id = hy_varieties_record.deal_id
+		LEFT JOIN hy_varieties ON hy_varieties_record.varieties_id =
+		hy_varieties.varieties_id
+		WHERE
+		(user_imports = '1' or user_imports = '0') and
+		hy_market.create_time > #{newTime1} 
+			<![CDATA[ AND hy_market.create_time < #{newTime2} ; ]]>
+	</select>
+	<!-- 汇总交易 -->
+	<select id="selectCount3" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT
+		IfNULL(sum( hy_varieties_record.num ),0) AS bynum
+		FROM
+		hy_varieties_record
+		RIGHT JOIN hy_market ON hy_market.deal_id = hy_varieties_record.deal_id
+		LEFT JOIN hy_varieties ON hy_varieties_record.varieties_id =
+		hy_varieties.varieties_id
+		WHERE
+		user_imports = '1' and
+		hy_market.create_time > #{newTime1} 
+			<![CDATA[ AND hy_market.create_time < #{newTime2} ; ]]>
+	</select>
+	<!-- 汇总服务 -->
+	<select id="selectCount4" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT
+		IfNULL(sum( hy_varieties_record.num * service_fee ),0) AS sernum
+		FROM
+		hy_varieties_record
+		RIGHT JOIN hy_market ON hy_market.deal_id = hy_varieties_record.deal_id
+		LEFT JOIN hy_varieties ON hy_varieties_record.varieties_id =
+		hy_varieties.varieties_id
+		WHERE
+		user_imports = '1' and
+		hy_market.create_time > #{newTime1} 
+			<![CDATA[ AND hy_market.create_time < #{newTime2} ; ]]>
+	</select>
+
+	<!-- 二级显示 -->
+	<select id="selectShow" parameterType="java.lang.String"
+		resultType="java.util.Map">
+		SELECT
+		hy_market.market_id hmmId,
+		hy_store.user_id AS stus,
+		store_ower,
+		hy_store.store_tel AS hsst,
+		case user_imports when '0' then '进入' when '1' then '卖出' when '3' then '买入'
+		when '4' then '出市' end AS cuser_imports,
+		hy_varieties_record.num AS vrn,
+		case sell_way when '0' then '线下' when '1' then '线上' end AS csell_way,
+		case print_status when '0' then '待付款' when '1' then '待开票' when '3' then
+		'已完成' end AS cprint_status,
+		store_copy.so AS so,
+		store_copy.st AS st,
+		hy_market.create_time AS date
+		FROM
+		hy_market
+		LEFT JOIN hy_store ON hy_market.user_id = hy_store.user_id
+		LEFT JOIN hy_varieties_record ON hy_market.deal_id =
+		hy_varieties_record.deal_id , (select store_ower as
+		so,hy_store.store_tel as st from hy_store) as store_copy
+		where
+		hy_store.user_id = #{stus} and store_copy.st = hy_market.sell_tel
+		<if test="user_imports != 789 ">
+			<bind name="user_imports" value="'%'+user_imports+'%'" />
+			and hy_market.user_imports like #{user_imports}
+		</if>
+		<if test="sell_way != 789 ">
+			<bind name="sell_way" value="'%'+sell_way+'%'" />
+			and hy_market.sell_way like #{sell_way}
+		</if>
+		<if test="print_status != 789">
+			<bind name="print_status" value="'%'+print_status+'%'" />
+			and hy_market.print_status like #{print_status}
+		</if>
+		<if test="print_status != 789">
+			<bind name="print_status" value="'%'+print_status+'%'" />
+			and hy_market.print_status like #{print_status}
+		</if>
+		<if test="date != null and date != ''">
+			and hy_market.create_time > #{date} 
+			<![CDATA[ AND hy_market.create_time < #{dateEnd} ]]>
+		</if>
+		and hy_market.create_time > #{opt1} <![CDATA[ AND hy_market.create_time < #{opt2} ]]>
+
+	</select>
+
+	<!-- 删除交易记录 -->
+	<delete id="listdel" parameterType="java.lang.String">
+		delete from hy_market where
+		market_id = #{hmmId};
+	</delete>
+
+	<!-- 根据卡号查找 -->
+	<select id="storeMesSel" parameterType="java.lang.String"
+		resultType="java.util.Map">
+		select
+		user_id,store_tel,store_ower,card,store_address,card_id,service_center,car_num
+		from hy_store where card_id = #{card_id};
+	</select>
+	<!-- 查找品种和服务费 -->
+	<select id="varietiesSel" resultType="java.util.Map">
+		select * from hy_varieties;
+	</select>
+	<!-- 判断电话号是否存在 -->
+	<select id="Pefsell_tel" parameterType="java.lang.String"
+		resultType="java.util.Map">
+		select * from hy_store where store_tel = #{tel};
+	</select>
+	
+	<!-- 根据id查找交易信息否存在 -->
+	<select id="Pefsell_suid" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		select store_tel from hy_store where user_id = #{user_id};
+	</select>
+
+	<!-- 添加卖出信息 -->
+	<insert id="btAdd"
+		parameterType="com.flyroc.ox_online.project.biz.exChange.domain.AddMessage">
+		insert into hy_market
+		values(#{market_id},#{user_id},#{deal_id},'1',#{bymm},#{sell_tel},'0','0',#{service_center},#{car_num},#{create_time},null,'','','','','','')
+	</insert>
+	<insert id="btAddCopy"
+		parameterType="com.flyroc.ox_online.project.biz.exChange.domain.AddMessage">
+		insert into hy_varieties_record values(#{id},#{deal_id},#{bynm},#{acid},'')
+	</insert>
+
+	<!-- 添加买入信息 -->
+	<insert id="MbtAdd"
+		parameterType="com.flyroc.ox_online.project.biz.exChange.domain.AddMessage">
+		insert into hy_market
+		values(#{market_id},#{user_id},#{deal_id},'3',#{bymm},#{sell_tel},'0','0',#{service_center},#{car_num},#{create_time},null,'','','','','','')
+	</insert>
+	<insert id="MbtAddCopy"
+		parameterType="com.flyroc.ox_online.project.biz.exChange.domain.AddMessage">
+		insert into hy_varieties_record values(#{id},#{deal_id},#{bynm},#{acid},'')
+	</insert>
+
+	<!-- 三级显示 -->
+	<select id="AddMessCopy" parameterType="java.lang.String"
+		resultType="java.util.Map">
+		select
+		store_address,
+		store_tel,
+		store_ower,
+		card,
+		card_id,
+		sell_tel,
+		hy_varieties_record.num as bynm,
+		hy_varieties.service_fee as byvr,
+		varieties_name
+		from
+		hy_varieties_record
+		LEFT JOIN hy_market ON hy_market.deal_id = hy_varieties_record.deal_id
+		LEFT JOIN hy_varieties on hy_varieties.varieties_id =
+		hy_varieties_record.varieties_id
+		LEFT JOIN hy_store on hy_store.user_id = hy_market.user_id
+		where hy_market.market_id = #{market_id}
+	</select>
+
+	<!-- 修改交易信息 -->
+	<update id="AddMessCopyUpdate"
+		parameterType="com.flyroc.ox_online.project.biz.exChange.domain.AddMessage">
+		UPDATE hy_varieties_record,
+		hy_market
+		SET hy_varieties_record.num = #{bynm}, hy_varieties_record.ox_id =
+		#{acid}
+		where hy_varieties_record.deal_id = hy_market.deal_id and
+		hy_market.market_id = #{id}
+	</update>
+
+	<!-- 四级显示 -->
+	<select id="onSel" parameterType="java.lang.String"
+		resultType="java.util.Map">
+		SELECT DISTINCT
+		hy_ox.*,(
+		SELECT
+		prop_val
+		FROM
+		hy_ox_prop
+		WHERE
+		hy_ox_prop.prop_name = '体重'
+		AND hy_varieties_record.ox_id = hy_ox_prop.ox_id
+		) AS tz,(
+		SELECT
+		prop_val
+		FROM
+		hy_ox_prop
+		WHERE
+		hy_ox_prop.prop_name = '性别'
+		AND hy_varieties_record.ox_id = hy_ox_prop.ox_id
+		) AS xb ,
+		case ox_state when '0' then '下架' when '1' then '申请中' when '2' then '已上架'
+		when '3' then '已售' end AS oxs
+		FROM
+		hy_varieties_record
+		RIGHT JOIN hy_market ON hy_varieties_record.deal_id = hy_market.deal_id
+		LEFT JOIN hy_ox ON hy_varieties_record.ox_id = hy_ox.ox_id
+		LEFT JOIN hy_ox_prop AS prop ON hy_varieties_record.ox_id = prop.ox_id
+		WHERE
+		hy_market.market_id = #{market_id}
+	</select>
+
+	<!-- 五级显示 -->
+	<select id="oxMes" parameterType="java.lang.String"
+		resultType="java.util.Map">
+		SELECT DISTINCT
+		hy_name,
+		full_name,
+		store_address,
+		title_url,
+		video_url,
+		hy_ox_feature.prop_val,
+		hy_ox_market.ox_reason as oxrea,
+		hy_ox.*,
+		(
+		SELECT
+		prop_val
+		FROM
+		hy_ox_prop
+		WHERE
+		hy_ox_prop.prop_name = '体重'
+		AND hy_varieties_record.ox_id = hy_ox_prop.ox_id
+		) AS tz,(
+		SELECT
+		prop_val
+		FROM
+		hy_ox_prop
+		WHERE
+		hy_ox_prop.prop_name = '性别'
+		AND hy_varieties_record.ox_id = hy_ox_prop.ox_id
+		) AS xb ,(
+		SELECT
+		prop_val
+		FROM
+		hy_ox_prop
+		WHERE
+		hy_ox_prop.prop_name = '年龄'
+		AND hy_varieties_record.ox_id = hy_ox_prop.ox_id
+		) AS nl
+		FROM
+		hy_varieties_record
+		RIGHT JOIN hy_market ON hy_varieties_record.deal_id = hy_market.deal_id
+		LEFT JOIN hy_ox ON hy_varieties_record.ox_id = hy_ox.ox_id
+		LEFT JOIN hy_ox_prop AS prop ON hy_varieties_record.ox_id = prop.ox_id
+		left join hy_store on hy_market.user_id = hy_store.user_id
+		left join hy_service_center on hy_service_center.id = hy_store.service_center
+		left join hy_ox_feature on hy_ox_feature.ox_id = hy_varieties_record.ox_id
+		left join hy_ox_market on hy_ox_market.ox_id = hy_varieties_record.ox_id 
+		WHERE
+		hy_market.market_id = #{market_id}
+	</select>
+	
+	<!-- 查询打印信息 -->
+	<select id="priReturn" parameterType="java.lang.String"
+		resultType="java.util.Map">
+		SELECT DISTINCT
+			market_id,
+			sell_tel,
+			varieties_name,
+			hy_varieties.service_fee as byvr,
+			hy_varieties_record.num as bynm,
+			store_ower,
+			store_tel,
+			card_id
+		FROM
+			hy_market
+			LEFT JOIN hy_store ON hy_market.user_id = hy_store.user_id
+			LEFT JOIN hy_varieties_record ON hy_varieties_record.deal_id = hy_market.deal_id
+			LEFT JOIN hy_varieties ON hy_varieties_record.varieties_id = hy_varieties.varieties_id 
+		WHERE
+			hy_market.market_id = #{market_id}
+	</select>
+	<select id="priReturns" parameterType="java.lang.String"
+		resultType="java.util.Map">
+			select store_ower,card_id,store_tel from hy_store where hy_store.store_tel = #{store_tel}
+	</select>
+</mapper>

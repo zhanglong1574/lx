@@ -1,0 +1,24 @@
+package com.flyroc.ox_online.project.biz.order.service;
+
+import com.flyroc.ox_online.project.biz.order.domain.Order;
+import com.flyroc.ox_online.project.system.post.domain.Post;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 用户 业务层
+ *
+ * @author ruoyi
+ */
+public interface IOrderService
+{
+    /**
+     * 根据条件分页查询用户列表
+     *
+     * @param
+     * @return 用户信息集合信息
+     */
+    public List<Map> selectOrderList(Order order);
+
+}

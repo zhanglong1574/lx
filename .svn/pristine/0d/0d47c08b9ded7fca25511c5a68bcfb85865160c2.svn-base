@@ -1,0 +1,182 @@
+ <!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('打印列表')" />
+</head>
+ <style>
+ 	div{
+ 		margin: 10px;
+ 		margin-top: 15px;
+ 	}
+ 	.divsp1{
+ 		display: flex;
+ 		justify-content: space-around;
+ 	}
+ </style>
+ <body>
+     <div id="print-area" style="width: 300px;border: 1px solid aliceblue;">
+         <div class="divsp1">
+         	<h3>（收据）</h3>
+         </div>
+         <div>
+         	NO：<span>xxxxxxxxxxxx</span>
+         </div>
+         <div class="divsp1">
+         	<div><span>品种</span></div>
+         	<div><span>数量</span></div>
+         	<div><span>服务</span></div>
+         </div>
+         <div class="divsp1">
+         	<span>xx</span>
+         	<span>xx</span>
+         	<span>xx</span>
+         </div>
+         <div>
+         	合计金额：<span>xx</span>
+         </div>
+         <div>
+         	开单时间：<span id="Jtime"></span>
+         </div>
+         <div>
+         	操作人：xxx
+         </div>
+         <div>
+         	<hr />
+         </div>
+         
+         
+         <div class="divsp1">
+         	<h3>（交易卡）</h3>
+         </div>
+         <div>
+         	<h4>交易信息</h4>
+         </div>
+         <div>
+         	NO：<span>xxxxxxxxxxxx</span>
+         </div>
+                  <div class="divsp1">
+         	<div><span>品种</span></div>
+         	<div><span>数量</span></div>
+         	<div><span>服务</span></div>
+         </div>
+         <div class="divsp1">
+         	<span>xx</span>
+         	<span>xx</span>
+         	<span>xx</span>
+         </div>
+         <div>
+         	合计金额：<span>xx</span>
+         </div>
+         
+         <div>
+         	<h4>卖家信息</h4>
+         </div>
+         <div>
+         	<div><span>卖方姓名：</span><input type="text" disabled="disabled"/></div>
+         	<div><span>卖方电话：</span><input type="text" disabled="disabled"/></div>
+         	<div><span>卖方卡号：</span><input type="text" disabled="disabled"/></div>
+         </div>
+         <div>
+         	<h4>买家爱信息</h4>
+         </div>
+         <div>
+         	<div><span>买方姓名：</span><input type="text" disabled="disabled"/></div>
+         	<div><span>买方电话：</span><input type="text" disabled="disabled"/></div>
+         	<div><span>买方卡号：</span><input type="text" disabled="disabled"/></div>
+         </div>
+         <div>
+         	开单时间：<span id="Ttime"></span>
+         </div>
+     </div>
+     <input type="button" onclick="print();" value="打印" id="prt">
+     
+     <th:block th:include="include :: footer" />
+</body>
+
+<script>
+	function showtime(){
+				var date = new Date();
+				year = date.getFullYear();
+				month = date.getMonth() + 1;
+				day = date.getDate();
+				var dateformate = date.toLocaleString();
+				document.getElementById("Jtime").innerText = dateformate
+				document.getElementById("Ttime").innerText = dateformate
+			}
+	setInterval("showtime()",1000);
+	
+    function  print(){
+        $("#print-area").jqprint({
+            debug: false,            
+            importCSS: true,         
+            printContainer: true,    
+             operaSupport: false  
+         });
+     }
+
+
+(function($) {
+    var opt;
+
+    $.fn.jqprint = function (options) {
+        opt = $.extend({}, $.fn.jqprint.defaults, options);
+
+        var $element = (this instanceof jQuery) ? this : $(this);
+        
+        if (opt.operaSupport && $.browser.opera) 
+        { 
+            var tab = window.open("","jqPrint-preview");
+            tab.document.open();
+
+            var doc = tab.document;
+        }
+        else 
+        {
+            var $iframe = $("<iframe  />");
+        
+            if (!opt.debug) { $iframe.css({ position: "absolute", width: "0px", height: "0px", left: "-600px", top: "-600px" }); }
+
+            $iframe.appendTo("body");
+            var doc = $iframe[0].contentWindow.document;
+        }
+        
+        if (opt.importCSS)
+        {
+            if ($("link[media=print]").length > 0) 
+            {
+                $("link[media=print]").each( function() {
+                    doc.write("<link type='text/css' rel='stylesheet' href='" + $(this).attr("href") + "' media='print' />");
+                });
+            }
+            else 
+            {
+                $("link").each( function() {
+                    doc.write("<link type='text/css' rel='stylesheet' href='" + $(this).attr("href") + "' />");
+                });
+            }
+        }
+        
+        if (opt.printContainer) { doc.write($element.outer()); }
+        else { $element.each( function() { doc.write($(this).html()); }); }
+        
+        doc.close();
+        
+        (opt.operaSupport && $.browser.opera ? tab : $iframe[0].contentWindow).focus();
+        setTimeout( function() { (opt.operaSupport && $.browser.opera ? tab : $iframe[0].contentWindow).print(); if (tab) { tab.close(); } }, 1000);
+    }
+    
+    $.fn.jqprint.defaults = {
+		debug: false,
+		importCSS: true, 
+		printContainer: true,
+		operaSupport: true
+	};
+
+    // Thanks to 9__, found at http://users.livejournal.com/9__/380664.html
+    jQuery.fn.outer = function() {
+      return $($('<div></div>').html(this.clone())).html();
+    } 
+})(jQuery);
+ </script> 
+
+</html>

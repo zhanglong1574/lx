@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+<th:block th:include="include :: header('定时任务列表')" />
+</head>
+<body class="gray-bg">
+	<div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="job-form">
+					<div class="select-list">
+						<ul>
+							<li><input type="hidden" name="store_ower" id="store_ower"
+								maxlength="10" /></li>
+							<li>订单状态：<select name="print_status">
+									<option value="789">所有</option>
+									<option value="0">待付款</option>
+									<option value="1">待开票</option>
+									<option value="2">已完成</option>
+							</select>
+							</li>
+							<li>交易方式：<select name="sell_way">
+									<option value="789">所有</option>
+									<option value="0">线下</option>
+									<option value="1">线上</option>
+							</select>
+							</li>
+							<li>交易状态：<select name="user_imports">
+									<option value="789">所有</option>
+									<option value="0">进入</option>
+									<option value="1">卖出</option>
+									<option value="3">买入</option>
+									<option value="4">出市</option>
+							</select>
+							</li>
+							<li>
+								<p style="width: 80px">选择日期：</p> <input type="text"
+								class="time-input" placeholder="日期" lay-key="5" id="date"
+								name="date">
+							</li>
+							<li><a class="btn btn-primary btn-rounded btn-sm"
+								onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm"
+								onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table"></table>
+			</div>
+		</div>
+	</div>
+	<th:block th:include="include :: footer" />
+	<script th:inline="javascript">
+	
+	//初始化日期
+	$(function(){
+		var now = new Date();
+        //格式化日，如果小于9，前面补0
+        var day = ("0" + now.getDate()).slice(-2);
+        //格式化月，如果小于9，前面补0
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+        //拼装完整日期格式
+        var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+        document.getElementById("date").value=(today);
+	})
+	
+	//匯總方法
+    function huizong(){
+    	var prefixShow = ctx + "biz/exchange";
+		$.modal.open('汇总', prefixShow + "/form");
+	}
+	//交易方法
+    function jiaoyi(){
+    	var prefixShow = ctx + "biz/exchange";
+    	var btn = ['<i class="fa fa-check" onclick="print();"></i> 打印', '<i class="fa fa-close"></i> 关闭'];
+		var options = {
+			title: '交易凭证打印',
+			width: "700",
+			height: "520",
+			url: prefixShow + "/print",
+			btn: btn,
+			callBack: doSubmit
+		};
+		$.modal.openOptions(options);
+	}
+    function doSubmit(index, layero) {
+    	//alert("进入了自定义选项提交方法");
+    	 var body = layer.getChildFrame('body', index);//获取子页面内容
+    	 var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+    	 body.find("#prt").click();//执行子页面的方法
+    }  
+	
+    
+    	//初始化列表
+        var detailFlag = [[${@permission.hasPermi('ecag:job:detail')}]];
+		var prefix = ctx + "biz/exchange";
+
+		$(function() {
+		    var options = {
+		        url: prefix + "/selShows",
+                updateUrl: prefix + "/selShow/{id}",
+                removeUrl: prefix + "/remove",
+		        sortName: "",
+		        sortOrder: "desc",
+		        modalName: "任务",
+		        columns: [{
+		            checkbox: true
+		        },
+		        {
+		            field: 'stus',
+		            title: '用户id',
+		            visible: false
+		        },
+		        {
+		            field: 'hmmId',
+		            title: '交易id',
+		            visible: false
+		        },
+		        {
+		            field: 'store_ower',
+		            title: '用户姓名',
+		        },
+		        {
+		            field: 'hsst',
+		            title: '用户电话',
+
+		        },
+		        {
+		            field: 'cuser_imports',
+		            title: '登记状态',
+		        },
+		        {
+		            field: 'vrn',
+		            title: '交易牛数',
+		        },
+		        {
+		            field: 'so',
+		            title: '对方姓名',
+		        },
+		        {
+		            field: 'st',
+		            title: '对方电话',
+		        },
+		        {
+		            field: 'csell_way',
+		            title: '交易方式',
+		        },
+		        {
+		            field: 'cprint_status',
+		            title: '订单状态',
+		        },
+		        {
+		            field: 'date',
+		            title: '创建时间',
+		        },
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		                var actions = [];
+		                actions.push('<a class="btn btn-warning btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="sells(\'' + row.hmmId + '\',\'' + row.csell_way + '\',\'' + row.cuser_imports + '\')"><i class="fa fa-search"></i>查看</a>');
+		                actions.push('<a class="btn btn-danger btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="listPrint();"><i class="fa fa-remove"></i>打印</a> ');
+		                actions.push('<a class="btn btn-info btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="listdel(\'' + row.hmmId + '\')"><i class="fa fa-key"></i>作废</a>');
+		                return actions.join('');
+		            }
+		        }]
+		    };
+		    $.table.init(options);
+		});
+		
+		//報廢按鈕
+		function listdel(flag){
+			var prefixShow = ctx + "biz/exchange";
+			$.modal.confirm("确认要点击确定吗?", function() {
+				
+				$.ajax({
+					url: prefix + "/listdel",
+		    	    dataType:"json",
+		    	    async:true,
+		    	    data:{"hmmId":flag},
+		    	    type:"get",
+		    	    success:function(data){
+		    	    	$.modal.msgReload("删除成功,正在刷新数据请稍后……", modal_status.SUCCESS);
+		    	    }
+				});
+	    	});	
+	    }
+		
+		//三级显示
+	    function sellssas(flag1,flag2,flag3){
+	    	var prefixShow = ctx + "biz/exchange";
+	    	var btn = ['<i class="fa fa-check"></i> 打印','<i class="fa fa-check"></i> 修改', '<i class="fa fa-close"></i> 关闭'];
+			var options = {
+				title: '查看',
+				width: "1350",
+				height: "750",
+				url: prefixShow + "/listShows/?market_id="+flag1+"&sell_way="+flag2+"&cuser_imports="+flag3,
+				btn: btn,
+				callBack:doSubmitbtUpdate
+			};
+			$.modal.openOptions(options);  	
+	    }
+	    function doSubmitbtUpdate(index, layero) {
+	    	 var iframeWin = layero.find('iframe')[0]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+	    	 //body.find("#btUpdate").click();//执行子页面的方法
+	    	 iframeWin.contentWindow.btUpdate(index, layero);
+	    	 return false;
+	    } 
+	    function doSubmitbtP(index, layero) {
+	    	 var iframeWin = layero.find('iframe')[0]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+	    	 //body.find("#btUpdate").click();//执行子页面的方法
+	    	 iframeWin.contentWindow.printf(index, layero);
+	    	 return false;
+	    } 
+	    
+
+	    
+	    function sells(flag1,flag2){
+	    	var prefixShow = ctx + "biz/exchange";
+	    	layer.open({
+	    		type:2,
+	    		area:["1350px","750px"],
+	    		fix:false,
+	    		maxmin:true,
+	    		shade:0.3,
+	    		title:"查看",
+	    		content:prefixShow + "/listShows/?market_id="+flag1+"&sell_way="+flag2,
+	    		btn:['打印','修改','关闭'],
+	    		shadeClose:true,
+	    		btn1:doSubmitbtP,
+	    		btn2:doSubmitbtUpdate,
+	    			cancel:function(index){
+	    				return true;
+	    			}
+	    	});	
+	    }
+		/* function searchDind() {
+			var opt = $("input[name=opt]:checked").val();
+			var store_ower = $("#store_ower").val();
+			var store_tel = $("#store_tel").val();
+			var date = $("#date").val();
+			alert(store_ower +store_tel+date)
+
+			$.ajax({
+				url:prefix + "/listShowLike",
+	    	    dataType:"json",
+	    	    data:{"opt":opt,"store_ower":store_ower,"store_tel":store_tel,"date":date},
+	    	    type:"get",
+	    	    success:function(data){
+	    	        $("#bootstrap-table").html();
+	    	        alert("as")
+	    	        for (var i = 0; i < data.lst.length; i++) {
+	    	        	$("tboty").append('<tr data-index="'+i+'"><td class="+bs-checkbox"><input data-index="'+i+'" name="btSelectItem" type="checkbox"></td><td style="">'+data.lst[i][hy_name]+'</td><td style="">'+data.lst[i][store_ower]+'</td><td style="">'+data.lst[i][hy_store]+'</td><td style="">'+data.lst[i][sumhy]+'</td><td style="text-align: center; "><a class="btn btn-warning btn-xs " href="javascript:void(0)" onclick="$.operate.detail("undefined")"><i class="fa fa-search"></i>详细</a> </td></tr>')
+					}
+	    	    }
+			});
+		} */
+		
+
+	</script>
+</body>
+</html>

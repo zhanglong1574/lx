@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flyroc.ox_online.project.biz.order.mapper.OrderMapper">
+
+    <resultMap type="Order" id="OrderResult">
+        <id     property="order_num"      	  		column="order_num"      />
+        <result property="user_id"    	  		column="user_id"    />
+        <result property="user_phone"      		column="user_phone"     />
+        <result property="user_name"   		column="user_name"   />
+        <result property="ox_id"    		  		column="ox_id"    />
+        <result property="amount"       		column="amount"      />
+        <result property="ox_price"     		column="ox_price"    />
+        <result property="discount"      column="discount"      />
+        <result property="real_pay"      column="real_pay"      />
+        <result property="order_status"      column="order_status"      />
+        <result property="order_time"      column="order_time"      />
+        <result property="ecpect_time"      column="ecpect_time"      />
+        <result property="delivery_time"      column="delivery_time"      />
+        <result property="opt_ready_user"      column="opt_ready_user"      />
+        <result property="reserve_time"      column="reserve_time"      />
+        <result property="pay_time"      column="pay_time"      />
+        <result property="receiving_time"      column="receiving_time"      />
+        <result property="opt_finish_user"      column="opt_finish_user"      />
+        <result property="close_time"      column="close_time"      />
+        <result property="reserve_remark"      column="reserve_remark"      />
+        <result property="remark"      column="remark"      />
+        <result property="shipping_address"      column="shipping_address"      />
+        <result property="courier_num"      column="receiving_time"      />
+    </resultMap>
+
+    <sql id="selectOrderVo">
+        select order_num,user_name,user_phone,amount,order_time,order_status
+		from hy_order
+    </sql>
+
+    <select id="selectOrderList" parameterType="Order" resultMap="OrderResult">
+        <include refid="selectOrderVo"/>
+        <where>
+            1=1
+        </where>
+    </select>
+
+</mapper>

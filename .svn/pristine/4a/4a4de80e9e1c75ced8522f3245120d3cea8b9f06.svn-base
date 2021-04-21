@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flyroc.ox_online.project.biz.exChange.statistics.mapper.StatisticsMapper">
+
+    <select id="selectMarket1" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			count(DATE_FORMAT(create_time, '%Y-%m')) as sl,
+			DATE_FORMAT(create_time, '%m') as sj
+		FROM
+			hy_market
+		GROUP BY
+			DATE_FORMAT(create_time, '%Y-%m')
+	</select>
+
+    <select id="selectMarket2" parameterType="com.flyroc.ox_online.project.biz.activation.domain.Str"
+            resultType="java.util.Map">
+        select
+        COUNT(mar.market_id) as mcount,
+		DATE_FORMAT(create_time, '%Y-%m') as times
+        from
+        hy_market as mar
+        where
+        (user_imports = 1 or user_imports = 3)
+        <if test="y != null and y != ''">
+            <![CDATA[ and mar.create_time < #{y} ]]>
+        </if>
+        <if test="n != null and n != ''">
+            and mar.create_time >= #{n}
+        </if>
+        GROUP BY
+		DATE_FORMAT(create_time, '%Y-%m')
+    </select>
+
+    <select id="selectMarket5" parameterType="com.flyroc.ox_online.project.biz.activation.domain.Str"
+            resultType="java.util.Map">
+		select
+			COUNT(mar.market_id) as mcount,
+			SUM(buy_price) as money,
+			DATE_FORMAT(create_time, '%Y-%m') as times
+		from
+			hy_market as mar
+		where
+			(user_imports = 1 or user_imports = 3)
+			and
+			sell_way = 0
+		GROUP BY
+			DATE_FORMAT(create_time, '%Y-%m')
+	</select>
+
+    <select id="selectMarket6" parameterType="com.flyroc.ox_online.project.biz.activation.domain.Str"
+            resultType="java.util.Map">
+		select
+			COUNT(mar.market_id) as mcount,
+			SUM(buy_price) as money,
+			DATE_FORMAT(create_time, '%Y-%m') as times
+		from
+			hy_market as mar
+		where
+			(user_imports = 1 or user_imports = 3)
+			and
+			sell_way = 1
+		GROUP BY
+			DATE_FORMAT(create_time, '%Y-%m')
+	</select>
+
+    <select id="selectMarket7" parameterType="com.flyroc.ox_online.project.biz.activation.domain.Str"
+            resultType="java.util.Map">
+		select
+			sell_way as id,
+			COUNT(mar.market_id) as mcount
+
+		from
+			hy_market as mar
+		where
+			(user_imports = 1 or user_imports = 3)
+		GROUP BY
+			sell_way
+	</select>
+
+    <select id="selectMarket8" parameterType="com.flyroc.ox_online.project.biz.activation.domain.Str"
+            resultType="java.util.Map">
+		select
+			sell_way as id,
+			SUM(buy_price) as mcount
+		from
+			hy_market as mar
+		where
+			(user_imports = 1 or user_imports = 3)
+		GROUP BY
+			sell_way
+	</select>
+
+    <select id="selectMarket9" parameterType="com.flyroc.ox_online.project.biz.activation.domain.Str"
+            resultType="java.util.Map">
+		select
+			COUNT(DATE_FORMAT(create_time, '%Y-%m')) as mcount,
+			DATE_FORMAT(create_time, '%Y-%m')as times
+		from
+			hy_ox as mar
+		where
+			id_type = 1
+		GROUP BY
+			DATE_FORMAT(create_time, '%Y-%m')
+
+	</select>
+
+    <select id="selectMarket10" parameterType="com.flyroc.ox_online.project.biz.activation.domain.Str"
+            resultType="java.util.Map">
+		select
+			COUNT(DATE_FORMAT(create_time, '%Y-%m')) as mcount,
+			DATE_FORMAT(create_time, '%Y-%m')as times
+		from
+			hy_store as mar
+		GROUP BY
+			DATE_FORMAT(create_time, '%Y-%m')
+	</select>
+
+
+</mapper>

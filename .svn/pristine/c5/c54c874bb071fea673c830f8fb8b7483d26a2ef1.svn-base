@@ -1,0 +1,21 @@
+package com.flyroc.ox_online.project.biz.exChange.service;
+
+import java.util.List;
+import java.util.Map;
+
+
+
+/**
+ * 参数配置 服务层
+ * 
+ * @author ruoyi
+ */
+public interface ExChangeService{
+   
+	public abstract List<Map> selectAll();
+	
+	public abstract List<Map> selectAllLikeExchange(String opt,String store_ower,String store_tel,String date);
+	
+	public abstract List<Map> selectCount();
+	
+}

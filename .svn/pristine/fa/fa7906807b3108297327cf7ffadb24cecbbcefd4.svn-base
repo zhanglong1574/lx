@@ -1,0 +1,20 @@
+package com.flyroc.ox_online.project.biz.activation.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.flyroc.ox_online.project.biz.activation.mapper.ActivationMapper;
+
+/**
+ * 参数配置 服务层实现
+ * 
+ * @author ruoyi
+ */
+@Service
+public class ActivationServiceImpl implements ActivationService{
+	
+    @Autowired
+    private ActivationMapper ActivationMapper;
+
+   
+}

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:include="include :: header('新增办卡激活')" />
+</head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<form class="form-horizontal m" id="form-oxMarket-add">
+			<input name="userId" id="userId" type="hidden">
+			<div class="col-md-6" style="width: 45%; float: left;">
+				<div class="form-group">
+					<label class="col-sm-3 control-label">手机号：</label>
+					<div class="col-sm-9">
+						<input type="text" name="storeTel" id="storeTel"
+							 class="form-control">
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6" style="width: 45%; float: left;">
+				<div class="form-group">
+					<label class="col-sm-3 control-label">姓名：</label>
+					<div class="col-sm-9">
+						<input type="text" name="storeOwer"
+							id="storeOwer" class="form-control"
+							disabled="disabled">
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6" style="width: 45%; float: left;">
+				<div class="form-group">
+					<label class="col-sm-3 control-label" style="padding: 7px 0 0 0;">身份证号：</label>
+					<div class="col-sm-9">
+						<input type="text" name="card" id="card"
+							class="form-control" disabled="disabled">
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6" style="width: 45%; float: left;">
+				<div class="form-group">
+					<label class="col-sm-3 control-label">所在地：</label>
+					<div class="col-sm-9">
+						<input type="text" name="storeAddress"
+							id="storeAddress" class="form-control"
+							disabled="disabled">
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6" id="car"
+				style="width: 45%; float: left;">
+				<div class="form-group">
+					<label class="col-sm-3 control-label">卡号：</label>
+					<div class="col-sm-9">
+						<input type="text" name="cid" id="cid" th:value="${cid}" class="form-control"
+							disabled="disabled">
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<th:block th:include="include :: footer" />
+	<script type="text/javascript">
+		var prefix = ctx + "biz/oxMarket"
+		$("#form-oxMarket-add").validate({
+			focusCleanup : true
+		});
+		
+		function submitHandler() {
+			var id = $("#userId").val();
+			var cid = $("#cid").val();
+			if (cid != null && cid != "") {
+				$.ajax({
+					url: prefix + "/add",
+					type: "POST",
+					async: true,
+					dataType: "json",
+					data:{"userId":id,"cid":cid},
+					
+					success: function(msg) {
+						if(msg.a == 1){
+							//调用父页面函数，并把刚刚输入的值传递到子页面
+							parent.sss(msg.a);
+							var index = parent.layer.getFrameIndex(window.name);
+				        	parent.layer.close(index);
+						}
+					}
+				});
+			}
+		}
+		
+		$("#storeTel").change(function(){
+			var storeTel = $(this).val();
+			if(!(/^(13[0-9]|15[0|1|3|6|7|8|9]|18[8|9])\d{8}$/.test(storeTel))){ 
+			        alert("手机号码有误，请重填");  
+			        return false; 
+			}
+			 $.ajax({
+					url: prefix + "/store",
+					type: "POST",
+					async: true,
+					dataType: "json",
+					data:{"storeTel":storeTel},
+					
+					success: function(msg) {
+						if(msg.a == 1){
+							var acti = msg.selectkh;
+							$("#userId").val(acti[0].userId);
+							$("#storeOwer").val(acti[0].storeOwer);
+							$("#card").val(acti[0].card);
+							$("#storeAddress").val(acti[0].storeAddress);
+						}else{
+							alert("没有此手机号码");
+						}
+					}
+				});
+			});
+		
+		
+	</script>
+</body>
+</html>

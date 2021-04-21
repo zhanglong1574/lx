@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="ox_online:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>ox_online</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="ox_online.war">
+      <element id="artifact" artifact-name="ox_online:war exploded" />
+    </root>
+  </artifact>
+</component>

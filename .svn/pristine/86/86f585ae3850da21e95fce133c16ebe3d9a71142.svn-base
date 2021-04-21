@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('办卡激活列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>店铺名：</p>
+                                <input type="text" name="hyName"/>
+                            </li>
+                            <li>
+                                <p>店铺电话：</p>
+                                <input type="text" name="storeTel"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i> 搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i> 重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-warning" onclick="edit()" shiro:hasPermission="biz:oxMarket:edit">
+                    <i class="fa fa-download"></i> 统计
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('biz:oxMarket:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('biz:oxMarket:remove')}]];
+        var prefix = ctx + "biz/oxMarket";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add/{id}",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove/{id}",
+                exportUrl: prefix + "/export",
+                modalName: "办卡激活",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'userId', 
+                    title : '主键',
+                    visible: false
+                },
+                {
+                    field : 'hyName', 
+                    title : '店铺名'
+                },
+                {
+                    field : 'storeOwer', 
+                    title : '店主姓名'
+                },
+                {
+                    field : 'storeAddress', 
+                    title : '所在地'
+                },
+                {
+                    field : 'card', 
+                    title : '身份证号'
+                },
+                {
+                    field : 'storeTel', 
+                    title : '店铺电话'
+                },
+                {
+                    field : 'isActivate', 
+                    title : '是否激活，'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.userId + '\')"><i class="fa fa-search"></i>查看</a> ');
+                        if(row.isActivate == "未激活"){
+                            actions.push('<a class="btn btn-warning btn-xs " href="javascript:void(0)" onclick="$.operate.add(\'' + row.userId + '\')"><i class="fa fa-search"></i>激活</a> ');
+                        }
+                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="remove(\'' + row.userId + '\')"><i class="fa fa-search"></i>统计</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+        function edit(){
+        	$.modal.open('统计', prefix + "/statistics");
+        }
+        function remove(id){
+        	$.modal.open('统计', prefix + "/statistics2?userId="+id);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flyroc.ox_online.project.biz.exChange.mapper.ExchangeMapper">
+
+    <select id="selectAllExchange" resultType="java.util.Map">
+        SELECT
+			hy_name,
+			store_ower,
+			hy_store.store_tel,
+			sum( hy_varieties_record.num ) AS sumhy 
+		FROM
+			hy_market
+			LEFT JOIN hy_store ON hy_market.user_id = hy_store.user_id
+			LEFT JOIN hy_varieties_record ON hy_market.deal_id = hy_varieties_record.deal_id 
+		GROUP BY
+			hy_store.user_id
+    </select>
+    
+    <select id="selectAllLikeExchange" resultType="java.util.Map">
+        SELECT
+			hy_name,
+			store_ower,
+			hy_store.store_tel,
+			sum( hy_varieties_record.num ) AS sumhy,
+			hy_market.create_time AS date
+		FROM
+			hy_market
+			LEFT JOIN hy_store ON hy_market.user_id = hy_store.user_id
+			LEFT JOIN hy_varieties_record ON hy_market.deal_id = hy_varieties_record.deal_id 
+		GROUP BY
+			hy_store.user_id
+		having  
+			1 = 1
+		<if test="store_tel != null and store_tel != ''">
+	    	AND store_tel LIKE #{store_tel}
+	    </if>
+	    <if test="store_ower != null and store_ower != ''">
+	    	AND store_ower LIKE #{store_ower}
+	    </if>
+	    <if test="date != null and date != ''">
+	    	AND date LIKE #{date}
+	    </if>
+	    <![CDATA[ AND date < #{opt} ]]>
+    </select>
+    
+    <select id="selectCount" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT
+			IfNULL(sum( buy_num ),0) AS bynum,
+			IfNULL(sum( buy_num * service_fee ),0) AS sernum,
+			IfNULL(sum( hy_varieties_record.num ),0) AS vrnum,
+			IfNULL(count( DISTINCT user_id ),0) AS usernum
+		FROM
+			hy_varieties_record
+			RIGHT JOIN hy_market ON hy_market.deal_id = hy_varieties_record.deal_id
+			LEFT JOIN hy_varieties ON hy_varieties_record.varieties_id = hy_varieties.varieties_id 
+		WHERE
+			hy_market.create_time > #{newTime1} 
+			<![CDATA[ AND hy_market.create_time < #{newTime2} ; ]]>
+    </select>
+  
+</mapper>

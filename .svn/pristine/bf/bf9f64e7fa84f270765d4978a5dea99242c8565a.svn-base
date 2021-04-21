@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:include="include :: header('新增办卡激活')" />
+</head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<form class="form-horizontal m" id="form-oxMarket-add">
+			<input name="userId" th:field="${Activation.userId}" type="hidden">
+			<div class="col-md-6" style="width: 45%; float: left;">
+				<div class="form-group">
+					<label class="col-sm-3 control-label">手机号：</label>
+					<div class="col-sm-9">
+						<input type="text" name="storeTel"
+							th:field="${Activation.storeTel}" class="form-control"
+							disabled="disabled">
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6" style="width: 45%; float: left;">
+				<div class="form-group">
+					<label class="col-sm-3 control-label">姓名：</label>
+					<div class="col-sm-9">
+						<input type="text" name="storeOwer"
+							th:field="${Activation.storeOwer}" class="form-control"
+							disabled="disabled">
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6" style="width: 45%; float: left;">
+				<div class="form-group">
+					<label class="col-sm-3 control-label" style="padding: 7px 0 0 0;">身份证号：</label>
+					<div class="col-sm-9">
+						<input type="text" name="card" th:field="${Activation.card}"
+							class="form-control" disabled="disabled">
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6" style="width: 45%; float: left;">
+				<div class="form-group">
+					<label class="col-sm-3 control-label">所在地：</label>
+					<div class="col-sm-9">
+						<input type="text" name="storeAddress"
+							th:field="${Activation.storeAddress}" class="form-control"
+							disabled="disabled">
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6" id="car"
+				style="width: 45%; float: left; display: none">
+				<div class="form-group">
+					<label class="col-sm-3 control-label">卡号：</label>
+					<div class="col-sm-9">
+						<input type="text" name="card_id" id="cardId" class="form-control"
+							disabled="disabled">
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<th:block th:include="include :: footer" />
+	<script type="text/javascript">
+		var prefix = ctx + "biz/oxMarket"
+		$("#form-oxMarket-add").validate({
+			focusCleanup : true
+		});
+
+		var str = "";
+		function submitHandler() {
+			var id = $("#userId").val();
+			var cid = $("#cardId").val();
+			if (cid != null && cid != "") {
+				$.ajax({
+					url: prefix + "/add",
+					type: "POST",
+					async: true,
+					dataType: "json",
+					data:{"userId":id,"cid":cid},
+					
+					success: function(msg) {
+						if(msg.a == 1){
+							//调用父页面函数，并把刚刚输入的值传递到子页面
+							parent.sss(msg.a);
+							var index = parent.layer.getFrameIndex(window.name);
+				        	parent.layer.close(index);
+						}else if(msg.a == 50){
+							alert("此卡号已绑定");
+							$("#car").css("display", "none");
+							str = "";
+						}
+					}
+				});
+			}
+		}
+		
+		
+		
+		$(document).keydown(function(event) {
+			if ($("#car").css("display") == "none") {
+				switch (event.keyCode) {
+				case 65:
+					str += "A"
+					return;
+				case 66:
+					str += "B"
+					return;
+				case 67:
+					str += "C"
+					return;
+				case 68:
+					str += "D"
+					return;
+				case 69:
+					str += "E"
+					return;
+				case 70:
+					str += "F"
+					return;
+				case 71:
+					str += "G"
+					return;
+				case 72:
+					str += "H"
+					return;
+				case 73:
+					str += "I"
+					return;
+				case 74:
+					str += "J"
+					return;
+				case 75:
+					str += "K"
+					return;
+				case 76:
+					str += "L"
+					return;
+				case 77:
+					str += "M"
+					return;
+				case 78:
+					str += "N"
+					return;
+				case 79:
+					str += "O"
+					return;
+				case 80:
+					str += "P"
+					return;
+				case 81:
+					str += "Q"
+					return;
+				case 82:
+					str += "R"
+					return;
+				case 83:
+					str += "S"
+					return;
+				case 84:
+					str += "T"
+					return;
+				case 85:
+					str += "U"
+					return;
+				case 86:
+					str += "V"
+					return;
+				case 87:
+					str += "W"
+					return;
+				case 88:
+					str += "X"
+					return;
+				case 89:
+					str += "Y"
+					return;
+				case 90:
+					str += "Z"
+					return;
+				case 48:
+					str += "0"
+					return;
+				case 49:
+					str += "1"
+					return;
+				case 50:
+					str += "2"
+					return;
+				case 51:
+					str += "3"
+					return;
+				case 52:
+					str += "4"
+					return;
+				case 53:
+					str += "5"
+					return;
+				case 54:
+					str += "6"
+					return;
+				case 55:
+					str += "7"
+					return;
+				case 56:
+					str += "8"
+					return;
+				case 57:
+					str += "9"
+					return;
+				case 96:
+					str += "0"
+					return;
+				case 97:
+					str += "1"
+					return;
+				case 98:
+					str += "2"
+					return;
+				case 99:
+					str += "3"
+					return;
+				case 100:
+					str += "4"
+					return;
+				case 101:
+					str += "5"
+					return;
+				case 102:
+					str += "6"
+					return;
+				case 103:
+					str += "7"
+					return;
+				case 104:
+					str += "8"
+					return;
+				case 105:
+					str += "9"
+					return;
+				case 13:
+					$("#cardId").val(str);
+					$("#car").css("display", "block");
+					return;
+				}
+			}
+
+		});
+	</script>
+</body>
+</html>

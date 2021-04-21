@@ -1,0 +1,10 @@
+package com.flyroc.ox_online.project.biz.activation.mapper;
+
+/**
+ * 参数配置 数据层
+ * 
+ * @author ruoyi
+ */
+public interface ActivationMapper{
+	
+}

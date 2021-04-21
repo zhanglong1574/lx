@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flyroc.ox_online.project.biz.oxMng.mapper.OxMngMapper">
+    
+    <resultMap type="OxMng" id="OxMngResult">
+    	<result property="ox_id"		column="ox_id"    />
+        <result property="ox_num"		column="ox_num"    />
+        <result property="normal_price"		column="normal_price"    />
+        <result property="ox_type_id"		column="ox_type_id"    />
+        <result property="ox_state"		column="ox_state"    />
+        <result property="create_time"		column="create_time"    />
+        <result property="goods_name"		column="goods_name"    />
+        <result property="prop_val"		column="prop_val"    />
+        <result property="id_type"		column="id_type"    />
+        <result property="prop_name"		column="prop_name"    />
+    </resultMap>
+    
+    <select id="selectOxsele" parameterType="OxMng" resultMap="OxMngResult">
+    	select 
+    		ox.ox_id,
+			ox.ox_num,
+			ox.normal_price,
+			ox.ox_type_id,
+			ox.ox_state,
+			ox.create_time,
+			ox.goods_name,
+			prop.prop_val as xb,
+			(select prop_val from hy_ox_prop where hy_ox_prop.prop_name = '体重' and ox.ox_id = hy_ox_prop.ox_id) as tz
+		from
+			hy_ox as ox
+			JOIN 
+			hy_ox_prop as prop 
+		ON 
+			ox.ox_id = prop.ox_id
+		where
+			ox.id_type = 1
+		and
+			prop.prop_name = '性别'
+            <if test="ox_num != null  and ox_num != ''"> and ox_num like concat('%', #{ox_num}, '%')</if>
+            <if test="ox_type_id != null  and ox_type_id != ''"> and ox_type_id = #{ox_type_id}</if>
+            <if test="ox_state != null  and ox_state != ''"> and ox_state = #{ox_state}</if>
+    </select>
+    
+    <select id="selectoxTypeId" parameterType="OxMng" resultMap="OxMngResult">
+    	select ox_type_id from hy_ox GROUP BY ox_type_id
+    </select>
+    
+    <select id="selectoxState" parameterType="OxMng" resultMap="OxMngResult">
+    	select ox_state from hy_ox GROUP BY ox_state
+    </select>
+    
+    <update id="updateOxState1" parameterType="java.util.Map">
+    	update 
+    		hy_ox 
+    	set 
+    		ox_state = #{ox_state},
+    		update_time = #{update_time}
+    		<if test="ox_reason != null  and ox_reason != ''">, ox_reason = #{ox_reason}</if>
+    	where 
+    		ox_id = #{ox_id}
+    </update>
+    
+    <delete id="deleteOxState" parameterType="java.util.Map">
+    	delete from hy_ox_market where ox_id = #{ox_id}
+    </delete>
+    
+    <update id="updateOxState2" parameterType="java.util.Map">
+    	update
+			hy_ox_market
+		set
+			ox_state = #{ox_state},
+			ox_reason = #{ox_reason}
+		where
+			ox_id = #{ox_id}
+    </update>
+    
+    <select id="selectOxCenSto"  parameterType="String" resultType="java.util.Map">
+    	select 
+    		ox.ox_id,
+			center.full_name,
+			ox.ox_num,
+			store.store_address,
+			store.hy_name,
+			ox.ox_type_id,
+			ox.normal_price,
+			prop.prop_val as xb,
+			(select prop_val from hy_ox_prop where hy_ox_prop.prop_name = '体重' and ox.ox_id = hy_ox_prop.ox_id) as tz,
+			(select prop_val from hy_ox_prop where hy_ox_prop.prop_name = '年龄' and ox.ox_id = hy_ox_prop.ox_id) as nl,
+			ox.age_unit,
+			ox.title_url,
+			ox.video_url,
+			feature.prop_val
+		from
+			hy_store as store
+		JOIN 
+			hy_ox as ox 
+		ON 
+			ox.store_id = store.user_id
+		JOIN 
+			hy_ox_prop as prop 
+		ON 
+			ox.ox_id = prop.ox_id
+		JOIN 
+			hy_ox_feature as feature 
+		ON 
+			feature.ox_id = prop.ox_id
+		JOIN 
+			hy_ox_market as market 
+		ON 
+			feature.ox_id = market.ox_id
+		JOIN 
+			hy_service_center as center 
+		ON 
+			center.id = market.market_id
+		where
+			ox.id_type = 1
+		and
+			ox.ox_id = #{ox_id}
+		and
+			prop.prop_name = '性别'
+    </select>
+    
+</mapper>

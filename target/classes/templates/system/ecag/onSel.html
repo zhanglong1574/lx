@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+<th:block th:include="include :: header('定时任务列表')" />
+</head>
+<body class="gray-bg">
+	<div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table"></table>
+			</div>
+		</div>
+	</div>
+	<th:block th:include="include :: footer" />
+	<script th:inline="javascript">
+	//初始化加载
+        var detailFlag = [[${@permission.hasPermi('ecag:job:detail')}]];
+		var prefix = ctx + "biz/exchange";
+
+		$(function() {
+		    var options = {
+		        url: prefix + "/onSel",
+		        sortName: "",
+		        sortOrder: "desc",
+		        modalName: "任务",
+		        columns: [{
+		            checkbox: true
+		        },
+		        {
+		            field: 'stus',
+		            title: 'id',
+		            visible: false
+		        },
+		        {
+		            field: 'ox_num',
+		            title: '牛编号'
+		        },
+		        {
+		            field: 'ox_type_id',
+		            title: '黄牛品种编码',
+		        },
+		        {
+		            field: 'goods_name',
+		            title: '牧场主',
+
+		        },
+		        {
+		            field: 'normal_price',
+		            title: '原价',
+		        },
+		        {
+		            field: 'tz',
+		            title: '体重',
+		        },
+		        {
+		            field: 'xb',
+		            title: '分类',
+		        },
+		        {
+		            field: 'create_time',
+		            title: '创建时间',
+		        },
+		        {
+		            field: 'oxs',
+		            title: '上架状态',
+		        },
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		                var actions = [];
+		                actions.push('<a class="btn btn-warning btn-xs ' + detailFlag + '" onclick="oxMesPage(\'' + row.stus + '\')"><i class="fa fa-search"></i>查看</a> ');
+		                return actions.join('');
+		            }
+		        }]
+		    };
+		    $.table.init(options);
+		});
+		
+		//五级页面接口
+		function oxMesPage(){
+			var prefixShow = ctx + "biz/exchange";
+	    	var btn = ['<i class="fa fa-check"></i> 确定', '<i class="fa fa-close"></i> 关闭'];
+			var options = {
+				title: '查看',
+				width: "1150",
+				height: "450",
+				url: prefixShow + "/oxMesPage/",
+				btn: btn,
+				callBack:doSubmitbtUpdate
+			};
+			$.modal.openOptions(options); 
+		}
+	    function doSubmitbtUpdate(index, layero) {
+	    	//alert("进入了自定义选项提交方法");
+	    	 var body = layer.getChildFrame('body', index);//获取子页面内容
+	    	 var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+	    	 body.find("#btUpdate").click();//执行子页面的方法
+	    }  
+
+	</script>
+</body>
+</html>

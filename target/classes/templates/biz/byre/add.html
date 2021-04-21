@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增牛棚信息')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-byre-add">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">服务中心：</label>
+            <div class="col-sm-8">
+                <select id="serviceCenter" name="serviceCenter" class="form-control" type="text">
+                    <option id='' value=''>--请选择服务中心--</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">新增牛棚数量：</label>
+            <div class="col-sm-8">
+                <input name="num" class="form-control" type="number" min="0">
+            </div>
+        </div>
+
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "biz/byre"
+
+    $(function () {
+        abc();
+    })
+    $("#form-byre-add").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-byre-add').serialize());
+        }
+    }
+
+    $("input[name='startTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='endTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+    function abc() {
+        $.ajax({
+                url: prefix + '/infoSave.do',
+                type: 'POST',
+                data: {},
+                dataType: 'json',
+                success: function (data) {
+                    if (data.isTrue == 1) {
+                        for (var i = 0; i < data.list.length; i++) {
+                            $("#serviceCenter").append(
+                                "<option id='" + data.list[i].id + "' value='" + data.list[i].id + "'>" +
+                                data.list[i].serviceCenter + "</option>"
+                            )
+                        }
+                    }
+                }
+            }
+        );
+    }
+</script>
+</body>
+</html>

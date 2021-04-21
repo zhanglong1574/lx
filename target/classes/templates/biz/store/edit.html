@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:include="include :: header('黄牛管理审核')" />
+</head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<form class="form-horizontal m" id="form-oxMarket-add">
+			<input name="user_id" id="user_id" type="hidden">
+			<div class="form-group">
+				<label class="col-sm-3 control-label">店铺名：</label>
+				<div class="col-sm-8">
+					<input type="text" name="hy_name" id="hy_name"
+						class="form-control" disabled="disabled">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">所在地：</label>
+				<div class="col-sm-8">
+					<input type="text" name="store_address" id="store_address"
+						class="form-control" disabled="disabled">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">农村详细地址：</label>
+				<div class="col-sm-8">
+					<input type="text" name="farm_address" id="farm_address" class="form-control"
+						disabled="disabled">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">店铺电话：</label>
+				<div class="col-sm-8">
+					<input type="text" name="store_tel" id="store_tel"
+						class="form-control" disabled="disabled">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">店铺状态：</label>
+				<div class="col-sm-8">
+					<input type="text" name="store_state" id="store_state"
+						class="form-control" disabled="disabled">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">logo图片：</label>
+				<div class="col-sm-8">
+					<div class="fileinput fileinput-new" data-provides="fileinput">
+						<div class="fileinput-new thumbnail"
+							style="width: 140px; height: 140px;">
+							<img src="" id="logo_url" disabled="disabled" style="height: 100%;">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">登录名：</label>
+				<div class="col-sm-8">
+					<input type="text" name="login_name" id="login_name" class="form-control"
+						disabled="disabled">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">身份标识：</label>
+				<div class="col-sm-8">
+					<input type="text" name="create_user" id="create_user" class="form-control"
+						disabled="disabled">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">审核人：</label>
+				<div class="col-sm-8">
+					<input type="text" name="storeState" id="storeState" class="form-control"
+						disabled="disabled">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">是否冻结：</label>
+				<div class="col-sm-8">
+					<input type="radio" name="is_freeze" class="is_freeze" value="是" disabled="disabled">是
+					<input type="radio" name="is_freeze" class="is_freeze" value="否" disabled="disabled">否
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">农村规模：</label>
+				<div class="col-sm-8">
+					<input type="text" name="farm_size" id="farm_size" class="form-control"
+						disabled="disabled">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">服务中心：</label>
+				<div class="col-sm-8">
+					<input type="text" name="service_center" id="service_center" class="form-control"
+						disabled="disabled">
+				</div>
+			</div>
+		</form>
+	</div>
+	<th:block th:include="include :: footer" />
+	<script type="text/javascript">
+		var prefix = ctx + "biz/oxMng"
+		$("#form-oxMarket-add").validate({
+			focusCleanup : true
+		});
+
+		function submitHandler() {
+			var index = parent.layer.getFrameIndex(window.name);
+        	parent.layer.close(index);
+		}
+		
+		
+		$(function(){
+			$("#user_id").val('[[${list.user_id}]]');
+			$("#hy_name").val('[[${list.hy_name}]]');
+			$("#store_address").val('[[${list.store_address}]]');
+			$("#farm_address").val('[[${list.farm_address}]]');
+			$("#store_tel").val('[[${list.store_tel}]]');
+			$("#store_state").val('[[${list.store_state}]]');
+			if('[[${list.store_state}]]' == "通过"){
+				$("#storeState").val("认证商家");
+			}else{
+				$("#storeState").val("未认证商家");
+			}
+			$("#logo_url").attr("src", "/"+'[[${list.logo_url}]]');
+			$("#login_name").val('[[${list.login_name}]]');
+			$("#create_user").val('[[${list.create_user}]]');
+			
+			var rObj = document.getElementsByName("is_freeze");
+			for(var i = 0;i < rObj.length;i++){
+                if(rObj[i].value == '[[${list.is_freeze}]]'){
+                    rObj[i].checked =  'checked';
+                }
+            }
+			var s = '[[${list.farm_size}]]';
+			if(s.indexOf("&lt;") != -1){
+				 $("#farm_size").val(s.replace("&lt;", "<"));
+			}else if(s.indexOf("&gt;") != -1){
+				$("#farm_size").val(s.replace("&gt;", ">"));
+			}else{
+				$("#farm_size").val('[[${list.farm_size}]]');
+			}
+			
+			$("#service_center").val('[[${list.service_center}]]');
+		})
+		
+	</script>
+</body>
+</html>

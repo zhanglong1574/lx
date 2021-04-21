@@ -1,0 +1,182 @@
+package com.flyroc.ox_online.project.biz.activation.service.impl;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.flyroc.ox_online.project.biz.activation.domain.Activation;
+import com.flyroc.ox_online.project.biz.activation.domain.Str;
+import com.flyroc.ox_online.project.biz.activation.mapper.ActivationMapper;
+import com.flyroc.ox_online.project.biz.activation.service.ActivationService;
+
+/**
+ * 办卡激活Service业务层处理
+ * 
+ * @author ruoyi
+ */
+@Service
+public class ActivationServiceImpl implements ActivationService{
+
+	@Autowired
+	private ActivationMapper ActivationMapper;
+
+
+	/**
+	 * 查询办卡激活列表
+	 * 
+	 * @param hyOxMarket 办卡激活
+	 * @return 办卡激活
+	 */
+	@Override
+	public List<Activation> selectHyOxMarketList(Activation activation) {
+		// TODO Auto-generated method stub
+		List<Activation> list = ActivationMapper.selectHyOxMarketList(activation);
+		int a = 0;
+		for (Activation activation1 : list) {
+			if(activation1.getIsActivate().equals("0")) {
+				list.get(a).setIsActivate("未激活");
+			}else {
+				list.get(a).setIsActivate("已激活");
+			}
+			a++;
+		}
+		return list;
+	}
+
+
+	@Override
+	public List<Activation> selectHyOxMarketById(String userId) {
+		// TODO Auto-generated method stub
+		List<Activation> list = ActivationMapper.selectHyOxMarketById(userId );
+		int a = 0;
+		for (Activation activation1 : list) {
+			if(activation1.getIsFreeze().equals("0")) {
+				list.get(a).setIsFreeze("未冻结");
+			}else {
+				list.get(a).setIsFreeze("已冻结");
+			}
+			if(activation1.getIsActivate().equals("0")) {
+				list.get(a).setIsActivate("未激活");
+			}else {
+				list.get(a).setIsActivate("已激活");
+			}
+			a++;
+		}
+		return list;
+	}
+
+	@Override
+	public List<HashMap<String,Object>> selectHyOxMarketCount() {
+		// TODO Auto-generated method stub
+		return ActivationMapper.selectHyOxMarketCount();
+	}
+
+
+	@Override
+	public List<HashMap<String, Object>> selectHyOxMarketMax() {
+		// TODO Auto-generated method stub
+		return ActivationMapper.selectHyOxMarketMax();
+	}
+
+
+	@Override
+	public List<HashMap<String, Object>> selectHyOxMarketMin() {
+		// TODO Auto-generated method stub
+		return ActivationMapper.selectHyOxMarketMin();
+	}
+
+
+	@Override
+	public List<HashMap<String,Object>> selectvarieties(Str str) {
+		// TODO Auto-generated method stub
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+		Calendar cd = Calendar.getInstance();
+		cd.setTime(date);
+		if(str.getStr() != null) {
+			if(str.getStr().equals("一月内")) {
+				cd.add(cd.DATE,1);
+				date = cd.getTime();
+				str.setY(sdf.format(date));
+				cd.add(cd.MONTH,-1);
+				date = cd.getTime();
+				str.setN(sdf.format(date));
+			}else if(str.getStr().equals("一年内")) {
+				cd.add(cd.DATE,1);
+				date = cd.getTime();
+				str.setY(sdf.format(date));
+				cd.add(cd.YEAR,-1);
+				date = cd.getTime();
+				str.setN(sdf.format(date));
+			}
+		}
+		List<HashMap<String,Object>> map = ActivationMapper.selectvarieties(str);
+		if(map == null) {
+			map = new ArrayList<HashMap<String,Object>>();
+			HashMap<String, Object> mmap = new HashMap<String, Object>();
+			mmap.put("marcount", 0);
+			mmap.put("vsum", 0);
+			map.add(mmap);
+		}
+		return map;
+	}
+
+	@Override
+	public HashMap<String,Object> selectmarket(Str str) {
+		// TODO Auto-generated method stub
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+		Calendar cd = Calendar.getInstance();
+		cd.setTime(date);
+		if(str.getStr() != null) {
+			if(str.getStr().equals("一月内")) {
+				cd.add(cd.DATE,1);
+				date = cd.getTime();
+				str.setY(sdf.format(date));
+				cd.setTime(date);
+				cd.add(cd.MONTH,-1);
+				date = cd.getTime();
+				str.setN(sdf.format(date));
+			}else if(str.getStr().equals("一年内")) {
+				cd.add(cd.DATE,1);
+				date = cd.getTime();
+				str.setY(sdf.format(date));
+				cd.setTime(date);
+				cd.add(cd.YEAR,-1);
+				date = cd.getTime();
+				str.setN(sdf.format(date));
+			}
+		}
+		HashMap<String,Object> map = ActivationMapper.selectmarket(str);
+		if(map == null) {
+			map = new HashMap<String, Object>();
+			map.put("mcount", "-");
+		}
+		return map;
+	}
+
+
+	@Override
+	public int updateHystore(Activation str) {
+		// TODO Auto-generated method stub
+		return ActivationMapper.updateHystore(str);
+	}
+
+
+	@Override
+	public List<Activation> selectkh(Activation activation) {
+		// TODO Auto-generated method stub
+		return ActivationMapper.selectkh(activation);
+	}
+
+
+
+
+}

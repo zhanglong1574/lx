@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.flyroc.ox_online.project.biz.varieties.mapper.VarietiesMapper">
+
+	<!-- 显示 -->
+	<select id="selectAll" resultType="java.util.Map">
+		SELECT
+		*
+		FROM
+		hy_varieties
+	</select>
+
+	<select id="selListdel" parameterType="java.lang.String"
+		resultType="java.util.Map">
+		select * from hy_varieties_record where varieties_id = #{varieties_id}
+	</select>
+	<!-- 刪除操作 -->
+	<delete id="listdel" parameterType="java.lang.String">
+		delete from hy_varieties where varieties_id = #{varieties_id}
+	</delete>
+	<!-- 驗證電話 -->
+	<select id="Pefsell_vn" parameterType="java.lang.String"
+		resultType="com.flyroc.ox_online.project.biz.varieties.domain.Varieties">
+		select * from hy_varieties where varieties_name = #{vn}
+	</select>
+	<!-- 添加品種 -->
+	<insert id="listInsert"
+		parameterType="com.flyroc.ox_online.project.biz.varieties.domain.Varieties">
+		insert into
+		hy_varieties(varieties_id,varieties_name,service_fee,before_price,create_time)
+		values(#{varieties_id},#{varieties_name},#{service_fee},#{before_price},#{create_time})
+	</insert>
+
+	<!-- 根據品種id查找 -->
+	<select id="listFindById" parameterType="java.lang.String"
+		resultType="com.flyroc.ox_online.project.biz.varieties.domain.Varieties">
+		select * from hy_varieties where varieties_id = #{varieties_id}
+	</select>
+
+	<!-- 更新操作 -->
+	<update id="listUpdate"
+		parameterType="com.flyroc.ox_online.project.biz.varieties.domain.Varieties">
+		update hy_varieties set varieties_name =
+		#{varieties_name},service_fee = #{service_fee},before_price =
+		#{before_price} where varieties_id = #{varieties_id}
+	</update>
+</mapper>

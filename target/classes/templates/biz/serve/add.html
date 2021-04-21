@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('岗位列表')" />
+    <style>
+        html, body, #allmap{
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            font-family: "微软雅黑";
+
+        }
+        #result{
+            padding: 7px 10px;
+            position: fixed;
+            top: 10px;
+            left: 20px;
+            width: 300px;
+            background: #fff;
+            box-shadow: 0 2px 6px 0 rgba(27, 142, 236, 0.5);
+            border-radius: 7px;
+            z-index: 99;
+        }
+        #cityName{
+            width:170px;
+            margin-right:10px;
+            height:25px;
+            border: 1px solid rgba(27, 142, 236, 0.5);
+            border-radius: 5px;
+        }
+        #result button{
+            border: 1px solid rgba(27, 142, 236, 0.5);
+            border-radius: 5px;
+            background: rgba(27, 142, 236, 0.5);
+            color: #fff
+        }
+    </style>
+    <script src="//api.map.baidu.com/api?type=webgl&v=1.0&ak=nSxiPohfziUaCuONe4ViUP2N"></script>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">市场名称：</label>
+            <div class="col-sm-3">
+                <input type="text" name="" id="service_center" class="form-control" maxlength="10">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">市场位置：</label>
+            <div class="col-sm-3">
+                <input type="text" name="" id="location" readonly="readonly" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">市场全名：</label>
+            <div class="col-sm-3">
+                <input type="text" name="" id="full_name" class="form-control" maxlength="20">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">所在地：</label>
+            <div class="col-sm-3">
+                <input type="text" name="" id="address" readonly="readonly" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">详细地址：</label>
+            <div class="col-sm-3">
+                <input type="text" name="" id="market_address" class="form-control" maxlength="10">
+            </div>
+        </div>
+    </div>
+    <div id="allmap"></div>
+    <div id='result' style="top: 120px">
+        城市名: <input id="cityName" type="text"/>
+        <button onclick="theLocation()"/>查询</button>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:post:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:post:remove')}]];
+    var datas = [[${@dict.getType('sys_normal_disable')}]];
+    var prefix = ctx + "biz/oxServiceCenter";
+
+    //     createUrl: prefix + "/add",
+    //     updateUrl: prefix + "/edit/{id}",
+    //     modalName: "岗位",
+    $(function() {
+        var options = {
+            url: prefix + "/list",
+            updateUrl: prefix + "/edit/{id}",
+            createUrl: prefix + "/add/{id}",
+            exportUrl: prefix + "/export",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'service_center',
+                    title: '市场交易名称'
+                },
+                {
+                    field: 'address',
+                    title: '地址',
+                    sortable: true
+                },
+                {
+                    field: 'market_ower',
+                    title: '负责人',
+                    sortable: true
+                },
+                {
+                    field: 'market_tel',
+                    title: '联系电话',
+                    sortable: true
+                },
+                {
+                    field: 'location',
+                    title: '位置',
+                    sortable: true
+                },
+                {
+                    field: 'area',
+                    title: '面积',
+                    sortable: true
+                },
+                {
+                    field: 'full_name',
+                    title: '全名',
+                    sortable: true
+                },
+                {
+                    field: 'scale',
+                    title: '规模',
+                    sortable: true
+                },
+                {
+                    field: 'remark',
+                    title: '备注',
+                    sortable: true
+                },
+                {
+                    title: '',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.add(\'' + row.id + '\')">编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')">删除</a> ');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+    function add(){
+        $.modal.open('市场', prefix + "/addServe");
+    }
+</script>
+</body>
+</html>
+<script>
+    var map = new BMapGL.Map('allmap');
+    map.centerAndZoom(new BMapGL.Point(116.404, 39.928), 15);
+    map.enableScrollWheelZoom(true);
+    map.addEventListener('click', function (e) {
+
+        var marker1 = new BMapGL.Marker(new BMapGL.Point(e.latlng.lng, e.latlng.lat));
+        // 在地图上添加点标记
+        map.addOverlay(marker1);
+        $("#location").val(e.latlng.lng + ',' + e.latlng.lat)
+    });
+    function theLocation(){
+        var city = document.getElementById("cityName").value;
+        if(city != ""){
+            map.centerAndZoom(city,11);      // 用城市名设置地图中心点
+        }
+    }
+    map.addEventListener('click', function (e) {
+        var point = new BMapGL.Point(e.latlng.lng, e.latlng.lat);
+        var gc = new BMapGL.Geocoder();
+        gc.getLocation(point, function (rs) {
+            var opts = {
+                title: '行政区划归属',
+                width: 220,
+                height: 92
+            };
+            var infoStr = '<div>省：' + rs.addressComponents.province + '</div>'
+                + '<div>市：' + rs.addressComponents.city + '</div>'
+                + '<div>区：' + rs.addressComponents.district + '</div>';
+            $("#address").val(rs.addressComponents.province +","+ rs.addressComponents.city +","+ rs.addressComponents.district)
+            var infoWindow = new BMapGL.InfoWindow(infoStr, opts);
+            map.openInfoWindow(infoWindow, point);
+        });
+    });
+
+    function submitHandler(){
+        var service_center = $("#service_center").val()
+        var address = $("#address").val()
+        var location = $("#location").val()
+        var full_name = $("#full_name").val()
+        var market_address = $("#market_address").val()
+        if (service_center == ''){
+            alert("牛市名不能为空")
+            return;
+        }
+        else if (address == ''){
+            alert("省市区不能为空")
+            return;
+        }
+        else if (location == ''){
+            alert("地址不能为空")
+            return;
+        }
+        else if (full_name == ''){
+            alert("全名不能为空")
+            return;
+        }
+        else if (market_address == ''){
+            alert("详细地址不能为空")
+            return;
+        }
+        $.ajax({
+            url: prefix + "/msg",
+            type: "Get",
+            async: true,
+            dataType: "json",
+            data:{"service_center":service_center,"address":address,"location":location,"full_name":full_name,"market_address":market_address},
+            success: function(msg) {
+
+            }
+        });
+    }
+</script>

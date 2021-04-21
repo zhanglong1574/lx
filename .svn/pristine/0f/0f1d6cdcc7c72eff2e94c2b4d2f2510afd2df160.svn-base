@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flyroc.ox_online.project.biz.activation.mapper.ActivationMapper">
+    
+    
+    <resultMap type="Activation" id="ActivationResult">
+        <result property="userId"    		column="user_id"    />
+        <result property="hyName"    		column="hy_name"    />
+        <result property="storeOwer"    	column="store_ower"    />
+        <result property="storeCard"    	column="store_card"    />
+        <result property="regionCode"    	column="region_code"    />
+        <result property="farmAddress"   	column="farm_address"    />
+        <result property="storeAddress"   	column="store_address"    />
+        <result property="regionValue"    	column="region_value"    />
+        <result property="serviceCenter"    column="service_center"    />
+        <result property="card"    			column="card"    />
+        <result property="family"    		column="family"    />
+        <result property="password"    		column="password"    />
+        <result property="storeTel"    		column="store_tel"    />
+        <result property="storeState"    	column="store_state"    />
+        <result property="logoUrl"    		column="logo_url"    />
+        <result property="bannerUrl"   		column="banner_url"    />
+        <result property="loginName"    	column="login_name"    />
+        <result property="email"    		column="email"    />
+        <result property="cardImgFront"    	column="card_img_front"    />
+        <result property="cardImgBack"    	column="card_img_back"    />
+        <result property="typeId"    		column="type_id"    />
+        <result property="introduction"    	column="introduction"    />
+        <result property="customerContact"  column="customer_contact"    />
+        <result property="businessName"    	column="business_name"    />
+        <result property="orgCode"    		column="org_code"    />
+        <result property="legalName"    	column="legal_name"    />
+        <result property="licenseUrl"    	column="license_url"    />
+        <result property="businessAddress"  column="business_address"    />
+        <result property="businessMain"    	column="business_main"    />
+        <result property="businessIntro"    column="business_intro"    />
+        <result property="idStatus"    		column="id_status"    />
+        <result property="createType"    	column="create_type"    />
+        <result property="createUser"    	column="create_user"    />
+        <result property="createTime"    	column="create_time"    />
+        <result property="updateTime"    	column="update_time"    />
+        <result property="isFreeze"    		column="is_freeze"    />
+        <result property="cid"    			column="cid"    />
+        <result property="handlerId"    	column="handler_id"    />
+        <result property="handlerStatus"    column="handler_status"    />
+        <result property="rejectReason"    	column="reject_reason"    />
+        <result property="farmSize"    		column="farm_size"    />
+        <result property="applyAuthTime"    column="apply_auth_time"    />
+        <result property="updateAuthTime"   column="update_auth_time"    />
+        <result property="isActivate"    	column="is_activate"    />
+        <result property="isActivateTime"   column="is_activate_time"      />
+    </resultMap>
+    
+    
+    
+    
+    <sql id="selectHyOxMarketVo">
+        select 
+        	user_id, hy_name, store_ower, store_address,
+        	card, store_tel,is_activate
+        from hy_store
+    </sql>
+    
+    <select id="selectHyOxMarketList" parameterType="Activation" resultMap="ActivationResult">
+       <include refid="selectHyOxMarketVo"/>
+        <where>  
+            <if test="hyName != null  and hyName != ''"> and hy_name like concat('%', #{hyName}, '%')</if>
+            <if test="storeTel != null  and storeTel != ''"> and store_tel = #{storeTel}</if>
+        </where>
+    </select>
+    
+    <select id="selectHyOxMarketById" parameterType="String" resultMap="ActivationResult">
+        select 
+        	user_id, hy_name, store_ower, store_address,
+        	card, store_tel, is_activate, is_freeze
+        from hy_store
+        where
+        	user_id = #{userId}
+    </select>
+
+	<select id="selectHyOxMarketCount" parameterType="java.util.Map" resultType="java.util.Map">
+		select
+			COUNT(is_activate_time) as count,
+			SUBSTRING(is_activate_time,1,10) as time
+		from hy_store
+		where
+			is_activate_time != ""
+		GROUP BY
+			SUBSTRING(is_activate_time,1,10)
+		ORDER BY
+			SUBSTRING(is_activate_time,1,10)
+	</select>
+	
+	<select id="selectHyOxMarketMax" parameterType="java.util.Map" resultType="java.util.Map">
+		select
+			COUNT(is_activate_time) as count,
+			SUBSTRING(is_activate_time,1,10) as time
+		from hy_store
+		where
+			is_activate_time != ""
+		GROUP BY
+			SUBSTRING(is_activate_time,1,10)
+		ORDER BY
+			count DESC
+		limit
+			0,1
+	</select>
+	
+	<select id="selectHyOxMarketMin" parameterType="java.util.Map" resultType="java.util.Map">
+		select
+			COUNT(is_activate_time) as count,
+			SUBSTRING(is_activate_time,1,10) as time
+		from hy_store
+		where
+			is_activate_time != ""
+		GROUP BY
+			SUBSTRING(is_activate_time,1,10)
+		ORDER BY
+			count
+		limit
+			0,1
+	</select>
+	
+	
+	<select id="selectvarieties" parameterType="com.flyroc.ox_online.project.biz.activation.domain.Str" resultType="java.util.HashMap">
+		select
+			COUNT(mar.market_id) as marcount,
+			sum(v.num) as vsum
+		from 
+			hy_market as mar
+		JOIN 
+			hy_varieties_record as v
+		on 
+			v.deal_id = mar.deal_id
+		where
+			user_imports = 0
+		and
+			user_id = #{userId}
+		<if test="y != null and y != ''">
+				<![CDATA[ and mar.create_time < #{y} ]]>
+		</if>
+		<if test="n != null and n != ''">
+				and mar.create_time >= #{n}
+		</if>
+	</select>
+	
+	<select id="selectmarket" parameterType="com.flyroc.ox_online.project.biz.activation.domain.Str" resultType="java.util.Map">
+		select
+			COUNT(mar.market_id) as mcount
+		from
+			hy_market as mar
+		where
+			(user_imports = 1 or user_imports = 3)
+		and
+			user_id = #{userId}
+		<if test="y != null and y != ''">
+				<![CDATA[ and mar.create_time < #{y} ]]>
+		</if>
+		<if test="n != null and n != ''">
+				and mar.create_time >= #{n}
+		</if>
+		
+	</select>
+	
+	<select id="selectkh" parameterType="Activation" resultMap="ActivationResult">
+		select 
+        	user_id
+        from hy_store
+        where
+        	card_id = #{cid}
+	</select>
+	
+	<update id="updateHystore" parameterType="Activation">
+		UPDATE
+			hy_store
+		set 
+			is_activate = 1, card_id = #{cid}, is_activate_time = #{isActivateTime}
+		where 
+			user_id = #{userId}
+	</update>
+    
+</mapper>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('办卡激活列表')" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" style="text-align: right">订单单号：</label>
+                        <div class="col-sm-3">
+                            <input type="text" name="" readonly="readonly" th:field="${Order.order_num}" class="form-control" placeholder="请输入文本">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" style="text-align: right">买家姓名：</label>
+                        <div class="col-sm-3">
+                            <input type="text" name="" readonly="readonly" th:field="${Order.store_ower}" class="form-control" placeholder="请输入文本">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" style="text-align: right">买家电话：</label>
+                        <div class="col-sm-3">
+                            <input type="text" name="" readonly="readonly" th:field="${Order.store_tel}" class="form-control" placeholder="请输入文本">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" style="text-align: right">订单时间：</label>
+                        <div class="col-sm-3">
+                            <input type="text" name="" readonly="readonly" th:field="${Order.create_time}" class="form-control" placeholder="请输入文本">
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="col-sm-12 table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+
+            <div class="col-sm-12 table-striped">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">多行文本框：</label>
+                    <div class="col-sm-9">
+                        <textarea type="text" name="" readonly="readonly" th:field="${Order.remark}" class="form-control" placeholder="请输入文本"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var prefix = ctx + "biz/hyOrder";
+
+    $(function() {
+        var options = {
+            url: prefix + "/list2",
+            createUrl: prefix + "/add/{id}",
+            updateUrl: prefix + "/edit2/{id}",
+            removeUrl: prefix + "/remove/{id}",
+            exportUrl: prefix + "/export",
+            modalName: "办卡激活",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field : 'store_ower',
+                    title : '卖家姓名'
+                },
+                {
+                    field : 'store_tel',
+                    title : '卖家电话'
+                },
+                {
+                    title: '详情',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.ox_id + '\')">查看</a> ');
+                        return actions.join('');
+                    }
+                },
+                {
+                    title: '处理',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<select id="verify"><option value="请确认">请确认</option><option value="通过">通过</option><option value="不通过">不通过</option></select> ');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    function submitHandler() {
+        var checkValue = $("#verify option:selected").val()
+        var order_num = $("#order_num").val()
+        if (checkValue == "通过"){
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+            parent.location.reload();
+            $.ajax({
+                url: prefix + "/dealchange",
+                type: "POST",
+                async: true,
+                dataType: "json",
+                data:{"order_num":order_num},
+                success: function(msg) {
+                    alert("通过")
+                }
+            });
+        }
+        else if (checkValue == "不通过"){
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+            parent.location.reload();
+            $.ajax({
+                url: prefix + "/dealchange1",
+                type: "POST",
+                async: true,
+                dataType: "json",
+                data:{"order_num":order_num},
+                success: function(msg) {
+                    alert("通过")
+                }
+            });
+        }
+    }
+
+</script>
+</body>
+</html>

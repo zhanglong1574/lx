@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('交易统计')"/>
+</head>
+<body class="gray-bg">
+<div class="row  border-bottom white-bg dashboard-header">
+    <div class="col-sm-12">
+        <p>ECharts开源来自百度商业前端数据可视化团队，基于html5
+            Canvas，是一个纯Javascript图表库，提供直观，生动，可交互，可个性化定制的数据可视化图表。创新的拖拽重计算、数据视图、值域漫游等特性大大增强了用户体验，赋予了用户对数据进行挖掘、整合的能力。 <a
+                    href="http://echarts.baidu.com/doc/about.html" target="_blank">了解更多</a>
+        </p>
+    <p>ECharts官网：<a href="http://echarts.baidu.com/" target="_blank">http://echarts.baidu.com/</a>
+    </p>
+
+</div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>市场参与人数统计图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+
+                    <div class="echarts" id="echarts-bar-chart1"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>市场交易量</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-line-chart2"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>市场交易量</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-line-chart5"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>市场交易量</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-line-chart6"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>饼状图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="graph_flot.html#">选项1</a>
+                            </li>
+                            <li><a href="graph_flot.html#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-pie-chart7"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>饼状图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="graph_flot.html#">选项1</a>
+                            </li>
+                            <li><a href="graph_flot.html#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-pie-chart8"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>折线图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="graph_flot.html#">选项1</a>
+                            </li>
+                            <li><a href="graph_flot.html#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-line-chart9"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>折线图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="graph_flot.html#">选项1</a>
+                            </li>
+                            <li><a href="graph_flot.html#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-line-chart10"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: echarts-js"/>
+
+<script type="text/javascript" th:inline="javascript">
+    var tu1c, tu2c, tu3c, tu4c, tu5c, tu6c, tu7c, tu8c, tu9c, tu10c;
+    var tu5d, tu9d;
+    $(function () {
+
+        //1tu
+        var tu1a = /*[[${list1}]]*/'Sebastian';
+        var tu1b = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+        tu1c = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        for (let i = 0; i < tu1a.length; i++) {
+            for (var j = 0; j < tu1b.length; j++) {
+                if (tu1a[i].sj == tu1b[j]) {
+                    tu1c[j] = tu1a[i].sl;
+                }
+            }
+        }
+        var barChart1 = echarts.init(document.getElementById("echarts-bar-chart1"));
+        var baroption1 = {
+            title: {
+                text: '市场参与人数'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['参与人数']
+            },
+            grid: {
+                x: 30,
+                x2: 40,
+                y2: 24
+            },
+            calculable: true,
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '参与人数',
+                    type: 'bar',
+                    data: tu1c,
+                    markPoint: {
+                        data: [
+                            {name: '年最高', value: 182.2, xAxis: 7, yAxis: 183, symbolSize: 18},
+                            {name: '年最低', value: 2.3, xAxis: 11, yAxis: 3}
+                        ]
+                    }
+                }
+            ]
+        };
+        barChart1.setOption(baroption1);
+
+        //2tu
+        var tu2a =/*[[${list2}]]*/'Sebastian';
+        var tu2b =/*[[${months}]]*/'Sebastian';
+        tu2c = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        for (let i = 0; i < tu2a.length; i++) {
+            for (let j = 0; j < tu2b.length; j++) {
+                if (tu2a[i].times == tu2b[j]) {
+                    tu2c[j] = tu2a[i].mcount;
+                }
+            }
+        }
+        var lineChart2 = echarts.init(document.getElementById("echarts-line-chart2"));
+        var lineoption2 = {
+            title: {
+                text: '市场交易量'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['交易量']
+            },
+            grid: {
+                x: 40,
+                x2: 40,
+                y2: 24
+            },
+            calculable: true,
+            xAxis: [
+                {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: /*[[${months}]]*/'Sebastian'
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '交易量',
+                    type: 'line',
+                    data: tu2c
+                },
+            ]
+        };
+        lineChart2.setOption(lineoption2);
+
+        //5tu
+        var tu5a =/*[[${list5}]]*/'Sebastian';
+        var tu5b =/*[[${months}]]*/'Sebastian';
+        tu5c = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        tu5d = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        for (let i = 0; i < tu5a.length; i++) {
+            for (let j = 0; j < tu5b.length; j++) {
+                if (tu5a[i].times == tu5b[j]) {
+                    tu5c[j] = tu5a[i].mcount;
+                    tu5d[j] = tu5a[i].money;
+                }
+            }
+        }
+        var lineChart5 = echarts.init(document.getElementById("echarts-line-chart5"));
+        var lineoption5 = {
+            title: {
+                text: '线下交易量、销售额统计'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['订单数', '销售额']
+            },
+            grid: {
+                x: 40,
+                x2: 40,
+                y2: 24
+            },
+            calculable: true,
+            xAxis: [
+                {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: tu5b
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '订单数',
+                    type: 'line',
+                    data: tu5c
+                },
+                {
+                    name: '销售额',
+                    type: 'line',
+                    data: tu5d
+                }
+            ]
+        };
+        lineChart5.setOption(lineoption5);
+
+        //6tu
+        var tu6a =/*[[${list5}]]*/'Sebastian';
+        var tu6b =/*[[${months}]]*/'Sebastian';
+        tu6c = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        tu6d = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        for (let i = 0; i < tu6a.length; i++) {
+            for (let j = 0; j < tu6b.length; j++) {
+                if (tu6a[i].times == tu6b[j]) {
+                    tu6c[j] = tu6a[i].mcount;
+                    tu6d[j] = tu6a[i].money;
+                }
+            }
+        }
+        var lineChart6 = echarts.init(document.getElementById("echarts-line-chart6"));
+        var lineoption6 = {
+            title: {
+                text: '线上交易量、销售额统计'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['订单数', '销售额']
+            },
+            grid: {
+                x: 40,
+                x2: 40,
+                y2: 24
+            },
+            calculable: true,
+            xAxis: [
+                {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: tu6b
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '订单数',
+                    type: 'line',
+                    data: tu6c
+                },
+                {
+                    name: '销售额',
+                    type: 'line',
+                    data: tu6d
+                },
+            ]
+        };
+        lineChart6.setOption(lineoption6);
+
+        //7
+        var tu7a =/*[[${list7}]]*/'Sebastian';
+        var tu7b = [];
+        for (let i = 0; i < tu7a.length; i++) {
+            var ss = {
+            };
+            if (tu7a[i].id == "0") {
+                ss.name="线下订单数";
+                ss.value=tu7a[i].mcount;
+            }else {
+                ss.name="线上订单数";
+                ss.value=tu7a[i].mcount;
+            }
+            tu7b.push(ss);
+        }
+        var pieChart7 = echarts.init(document.getElementById("echarts-pie-chart7"));
+        var pieoption7 = {
+            title: {
+                text: '线上线下订单数对比',
+                subtext: '订单数',
+                x: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                x: 'left',
+                data: ['线上订单数', '线下订单数']
+            },
+            calculable: true,
+            series: [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '60%'],
+                    data: tu7b
+                    /*[
+                        {value: 335, name: '直接访问'},
+                        {value: 310, name: '邮件营销'},
+                        {value: 234, name: '联盟广告'},
+                        {value: 135, name: '视频广告'},
+                        {value: 1548, name: '搜索引擎'}
+                    ]*/
+                }
+            ]
+        };
+        pieChart7.setOption(pieoption7);
+        $(window).resize(pieChart7.resize);
+        //8
+        var tu8a =/*[[${list8}]]*/'Sebastian';
+        var tu8b = [];
+        for (let i = 0; i < tu8a.length; i++) {
+            var ss = {
+            };
+            if (tu8a[i].id == "0") {
+                ss.name="线下交易额";
+                ss.value=tu8a[i].mcount;
+            }else {
+                ss.name="线上交易额";
+                ss.value=tu8a[i].mcount;
+            }
+            tu8b.push(ss);
+        }
+        var pieChart8 = echarts.init(document.getElementById("echarts-pie-chart8"));
+        var pieoption8 = {
+            title: {
+                text: '线上线下交易额对比',
+                subtext: '交易额',
+                x: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                x: 'left',
+                data: ['线上交易额', '线下交易额']
+            },
+            calculable: true,
+            series: [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '60%'],
+                    data: tu8b
+                }
+            ]
+        };
+        pieChart8.setOption(pieoption8);
+        $(window).resize(pieChart8.resize);
+
+        //9tu
+        var tu9a =/*[[${list9}]]*/'Sebastian';
+        var tu9b =/*[[${months}]]*/'Sebastian';
+        tu9c = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        tu9d = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        for (let i = 0; i < tu9a.length; i++) {
+            for (let j = 0; j < tu9b.length; j++) {
+                if (tu9a[i].times == tu9b[j]) {
+                    tu9c[j] = tu9a[i].mcount;
+                }
+            }
+        }
+        var lineChart9 = echarts.init(document.getElementById("echarts-line-chart9"));
+        var lineoption9 = {
+            title: {
+                text: '黄牛统计'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['黄牛数']
+            },
+            grid: {
+                x: 40,
+                x2: 40,
+                y2: 24
+            },
+            calculable: true,
+            xAxis: [
+                {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: tu9b
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '黄牛数',
+                    type: 'line',
+                    data: tu9c
+                },
+            ]
+        };
+        lineChart9.setOption(lineoption9);
+
+        //10tu
+        var tu10a =/*[[${list10}]]*/'Sebastian';
+        var tu10b =/*[[${months}]]*/'Sebastian';
+        tu10c = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        tu10d = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        for (let i = 0; i < tu10a.length; i++) {
+            for (let j = 0; j < tu10b.length; j++) {
+                if (tu10a[i].times == tu10b[j]) {
+                    tu10c[j] = tu10a[i].mcount;
+                }
+            }
+        }
+        var lineChart10 = echarts.init(document.getElementById("echarts-line-chart10"));
+        var lineoption10 = {
+            title: {
+                text: '用户统计'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['用户数']
+            },
+            grid: {
+                x: 40,
+                x2: 40,
+                y2: 24
+            },
+            calculable: true,
+            xAxis: [
+                {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: tu10b
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '用户数',
+                    type: 'line',
+                    data: tu10c
+                },
+            ]
+        };
+        lineChart10.setOption(lineoption10);
+
+
+    });
+</script>
+</body>
+</html>

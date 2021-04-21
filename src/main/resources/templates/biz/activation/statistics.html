@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('办卡激活列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li style="">
+                                <input type="radio" name="str" value="一月内" style="height: 13px;width: 100px;margin-top: 10px;"/>一月内
+                                <input type="radio" name="str" value="一年内" style="height: 13px; width: 100px;margin-top: 10px;"/>一年内
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()" shiro:hasPermission="biz:oxMarket:list2"><i class="fa fa-search"></i> 搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i> 重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "biz/oxMarket";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list2",
+                createUrl: prefix + "/add/{id}",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove/{id}",
+                exportUrl: prefix + "/export",
+                modalName: "办卡激活",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'marcount', 
+                    title : '入市次数'
+                },
+                {
+                    field : 'vsum', 
+                    title : '入市数量'
+                },
+                {
+                    field : 'mcount', 
+                    title : '交易数量'
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

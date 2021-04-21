@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:include="include :: header('新增办卡激活')" />
+</head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<form class="form-horizontal m" id="form-oxMarket-add">
+			<input name="ox_id" id="ox_id" type="hidden">
+				<div class="form-group">
+					<label class="col-sm-3 control-label">驳回原因：</label>
+					<div class="col-sm-8">
+						<input type="text" name="bh" id="bh" class="form-control" >
+					</div>
+				</div>
+		</form>
+	</div>
+	 <th:block th:include="include :: footer" /> 
+	<script type="text/javascript">
+		var prefix = ctx + "biz/oxMarket"
+		$("#form-oxMarket-add").validate({
+			focusCleanup : true
+		});
+
+		function submitHandler() {
+			var a = $("#bh").val();
+			if(a == null || a.length == 0){
+				alert("请输入内容");
+			}else if(a.length > 255){
+				alert("输入内容过长 只能输入255个字");
+			}else{
+				//调用父页面函数，并把刚刚输入的值传递到子页面
+				parent.sss(a);
+				var index = parent.layer.getFrameIndex(window.name);
+	        	parent.layer.close(index);
+			}
+			
+		}
+		
+		
+	</script>
+</body>
+</html>

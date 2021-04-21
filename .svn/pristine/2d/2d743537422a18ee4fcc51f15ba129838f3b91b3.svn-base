@@ -1,0 +1,67 @@
+package com.flyroc.ox_online.project.biz.exChange.service;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.flyroc.ox_online.project.biz.activation.mapper.ActivationMapper;
+import com.flyroc.ox_online.project.biz.exChange.domain.SelectAll;
+import com.flyroc.ox_online.project.biz.exChange.mapper.ExchangeMapper;
+
+/**
+ * 参数配置 服务层实现
+ * 
+ * @author ruoyi
+ */
+@Service("exChangeService")
+public class ExChangeServiceImpl implements ExChangeService{
+	
+    @Autowired
+    private ExchangeMapper exchangeMapper;
+
+	@Override
+	public List<Map> selectAll() {
+		// TODO Auto-generated method stub
+		return exchangeMapper.selectAllExchange();
+	}
+
+	@Override
+	public List<Map> selectAllLikeExchange(String opt, String store_ower, String store_tel, String date) {
+		// TODO Auto-generated method stub
+		if(opt.equals("option1")) {
+			Calendar calendar = Calendar.getInstance();
+			SimpleDateFormat sdf1 = new SimpleDateFormat("YYYY-MM-dd");
+			calendar.add(Calendar.DATE, -3);
+			opt = sdf1.format(calendar.getTime());
+		}else if(opt.equals("option2")){
+			Calendar calendar = Calendar.getInstance();
+			SimpleDateFormat sdf1 = new SimpleDateFormat("YYYY-MM-dd");
+			calendar.add(Calendar.DATE, -7);
+			opt = sdf1.format(calendar.getTime());
+		}else if(opt.equals("option3")){
+			Calendar calendar = Calendar.getInstance();
+			SimpleDateFormat sdf1 = new SimpleDateFormat("YYYY-MM-dd");
+			calendar.add(Calendar.MONTH, -1);
+			opt = sdf1.format(calendar.getTime());
+		}
+		return exchangeMapper.selectAllLikeExchange(opt, store_ower, store_tel, date);
+	}
+
+	@Override
+	public List<Map> selectCount() {
+		// TODO Auto-generated method stub
+		SimpleDateFormat sp=new SimpleDateFormat("yyyy-MM-dd");
+		String newTime1=sp.format(new Date(System.currentTimeMillis()-1000*60*60*24))+" 00:00:00";
+		String newTime2=sp.format(new Date(System.currentTimeMillis()+1000*60*60*24))+" 00:00:00";
+		System.out.println(newTime2);
+		return exchangeMapper.selectCount(newTime1, newTime2);
+	}
+
+   
+}

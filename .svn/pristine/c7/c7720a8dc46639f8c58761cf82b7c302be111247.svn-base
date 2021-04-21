@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flyroc.ox_online.project.biz.byre.mapper.HyByreMapper">
+
+    <resultMap type="HyByre" id="HyByreResult">
+        <result property="byreId"           column="byre_id"    />
+        <result property="serviceCenter"    column="service_center"    />
+        <result property="byreNum"          column="byre_num"    />
+        <result property="userId"           column="user_id"    />
+        <result property="createTime"       column="create_time"    />
+        <result property="startTime"        column="start_time"    />
+        <result property="endTime"          column="end_time"    />
+    </resultMap>
+
+    <sql id="selectHyByreVo">
+        select byre_id, service_center, byre_num, user_id, create_time, start_time, end_time from hy_byre
+    </sql>
+
+    <select id="selectHyByreList" parameterType="HyByre" resultMap="HyByreResult">
+        <include refid="selectHyByreVo"/>
+        <where>
+            <if test="serviceCenter != null  and serviceCenter != ''"> and service_center = #{serviceCenter}</if>
+            <if test="byreNum != null "> and byre_num = #{byreNum}</if>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+        </where>
+    </select>
+
+    <select id="selectHyByreById" parameterType="String" resultMap="HyByreResult">
+        <include refid="selectHyByreVo"/>
+        where byre_id = #{byreId}
+    </select>
+
+    <insert id="insertHyByre" parameterType="HyByre">
+        insert into hy_byre
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="byreId != null  and byreId != ''">byre_id,</if>
+            <if test="serviceCenter != null  and serviceCenter != ''">service_center,</if>
+            <if test="byreNum != null ">byre_num,</if>
+            <if test="userId != null  and userId != ''">user_id,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="startTime != null ">start_time,</if>
+            <if test="endTime != null ">end_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="byreId != null  and byreId != ''">#{byreId},</if>
+            <if test="serviceCenter != null  and serviceCenter != ''">#{serviceCenter},</if>
+            <if test="byreNum != null ">#{byreNum},</if>
+            <if test="userId != null  and userId != ''">#{userId},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="endTime != null ">#{endTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateHyByre" parameterType="HyByre">
+        update hy_byre
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="serviceCenter != null  and serviceCenter != ''">service_center = #{serviceCenter},</if>
+            <if test="byreNum != null ">byre_num = #{byreNum},</if>
+            <if test="userId != null  and userId != ''">user_id = #{userId},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="startTime != null ">start_time = #{startTime},</if>
+            <if test="endTime != null ">end_time = #{endTime},</if>
+        </trim>
+        where byre_id = #{byreId}
+    </update>
+
+    <delete id="deleteHyByreById" parameterType="String">
+        delete from hy_byre where byre_id = #{byreId}
+    </delete>
+
+    <delete id="deleteHyByreByIds" parameterType="String">
+        delete from hy_byre where byre_id in
+        <foreach item="byreId" collection="array" open="(" separator="," close=")">
+            #{byreId}
+        </foreach>
+    </delete>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

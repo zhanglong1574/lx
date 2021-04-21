@@ -1,0 +1,103 @@
+package com.flyroc.ox_online.project.biz.register.controller;
+
+import com.flyroc.ox_online.framework.web.controller.BaseController;
+import com.flyroc.ox_online.framework.web.page.TableDataInfo;
+import com.flyroc.ox_online.project.biz.activation.domain.Activation;
+import com.flyroc.ox_online.project.biz.register.domain.Register;
+import com.flyroc.ox_online.project.biz.register.service.IRegisterService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.HashMap;
+import java.util.List;
+
+@Controller
+@RequestMapping("/biz/register")
+public class RegisterController extends BaseController {
+    private String prefix = "biz/register";
+
+    @Autowired
+    private IRegisterService registerService;
+
+    /**
+     * 跳页
+     *
+     * @return
+     */
+    @RequiresPermissions("biz:register:view")
+    @GetMapping()
+    public String register() {
+        return prefix + "/register";
+    }
+
+    /**
+     * 列表数据
+     *
+     * @param register
+     * @return
+     */
+    @RequiresPermissions("biz:register:list")
+    @PostMapping("/list")
+    @ResponseBody
+    public TableDataInfo list(Register register) {
+        startPage();
+        List<Register> list = registerService.selectTurnoverMassage();
+        return getDataTable(list);
+    }
+
+    /**
+     * 弹窗页面跳转
+     *
+     * @return
+     */
+    @RequiresPermissions("biz:register:form")
+    @GetMapping("/form")
+    public String from(ModelMap mmap) {
+        List<HashMap<String,Object>> map = registerService.selectHyOxMarketCount();
+        List<HashMap<String,Object>> max = registerService.selectHyOxMarketMax();
+        List<HashMap<String,Object>> min = registerService.selectHyOxMarketMin();
+        List<HashMap<String,Object>> max1 = registerService.selectHyOxMarketMax1();
+        List<HashMap<String,Object>> min1 = registerService.selectHyOxMarketMin1();
+        Object ax = max.get(0).get("count");
+        Object in = min.get(0).get("count");
+        Object ax1 = max1.get(0).get("count1");
+        Object in1 = min1.get(0).get("count1");
+        Object[] count = new Object[map.size()];
+        Object[] count1 = new Object[map.size()];
+        Object[] time = new Object[map.size()];
+        int a = 0;
+        for (HashMap<String, Object> map2 : map) {
+            count[a] = map2.get("count");
+            count1[a] = map2.get("count1");
+            time[a] = map2.get("time");
+            if(map2.get("time").equals(max.get(0).get("time"))) {
+                mmap.put("max", a);
+            }
+            if(map2.get("time").equals(min.get(0).get("time"))) {
+                mmap.put("min", a);
+            }
+            if(map2.get("time").equals(max1.get(0).get("time"))) {
+                mmap.put("max1", a);
+            }
+            if(map2.get("time").equals(min1.get(0).get("time"))) {
+                mmap.put("min1", a);
+            }
+            a++;
+        }
+        mmap.put("count", count);
+        mmap.put("count1", count1);
+        mmap.put("time", time);
+        mmap.put("ax", ax);
+        mmap.put("in", in);
+        mmap.put("ax1", ax1);
+        mmap.put("in1", in1);
+        return prefix + "/form";
+    }
+
+}

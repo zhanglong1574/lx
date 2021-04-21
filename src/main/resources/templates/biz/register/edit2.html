@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改参数')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-config-edit">
+        <input name="userId" th:field="${Activation.userId}" type="hidden">
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">手机号：</label>
+            <div class="col-sm-4">
+                <input id="storeTel" name="storeTel" th:field="${Activation.storeTel}" class="form-control"
+                       type="text"
+                       required disabled="disabled">
+            </div>
+            <label class="col-sm-2 control-label">姓名：</label>
+            <div class="col-sm-4">
+                <input id="storeOwer" name="storeOwer" th:field="${Activation.storeOwer}" class="form-control"
+                       type="text" required disabled="disabled">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">身份证号：</label>
+            <div class="col-sm-4">
+                <input id="card" name="card" th:field="${Activation.card}" class="form-control" type="text"
+                       required disabled="disabled">
+            </div>
+            <label class="col-sm-2 control-label">所在地：</label>
+            <div class="col-sm-4">
+                <input id="storeAddress" name="storeAddress" th:field="${Activation.storeAddress}"
+                       class="form-control" type="text" required disabled="disabled">
+            </div>
+        </div>
+        <br>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">牛棚编号：</label>
+            <div class="col-sm-4">
+                <select name="HyByre" class="form-control m-b" id="HyByre"></select>
+            </div>
+            <label class="col-sm-2 control-label">车牌号：</label>
+            <div class="col-sm-4">
+                <input id="carNum" name="carNum" th:field="${Activation.carNum}" class="form-control" type="text"
+                       required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">时间：</label>
+            <div class="col-sm-4">
+                <input name="time" class="form-control m-b" id="time" type="date">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">品种：</label>
+            <div class="col-sm-4">
+                <select name="HyVarieties" class="form-control m-b HyVarieties"></select>
+            </div>
+            <label class="col-sm-2 control-label">数量：</label>
+            <div class="col-sm-4">
+                <input name="quantity" class="form-control quantity " type="number" min="0" required>
+            </div>
+            <div style="position: relative;left: 375px;top: -25px; z-index: -1" id="plus">
+                <i class="fa fa-plus"></i>
+            </div>
+        </div>
+
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    var prefix = ctx + "biz/register";
+    var x = 1;
+    var y;
+    $(function () {
+        abc();
+    });
+
+    function abc() {
+        $.ajax({
+                url: prefix + '/infoSave.do',
+                type: 'POST',
+                data: {},
+                dataType: 'json',
+                success: function (data) {
+                    y = data.HyVarieties[i];
+                    $("#HyByre").append(
+                        "<option id='' value='' selected='selected'>-- 请选择 --</option>"
+                    );
+                    $(".HyVarieties").append(
+                        "<option id='' value='' selected='selected'>-- 请选择 --</option>"
+                    );
+
+                    if (data.isTrue == 2) {
+                        for (var i = 0; i < data.HyByre.length; i++) {
+                            $("#HyByre").append(
+                                "<option id='" + data.HyByre[i].byreId + "' value='" + data.HyByre[i].byreNum + "'>" +
+                                data.HyByre[i].byreNum +
+                                "</option>"
+                            );
+                        }
+                        for (var i = 0; i < data.HyVarieties.length; i++) {
+                            $(".HyVarieties").append(
+                                "<option id='" + data.HyVarieties[i].varietiesId + "' value='" + data.HyVarieties[i].varietiesId + "'>" +
+                                data.HyVarieties[i].varietiesName +
+                                "</option>"
+                            );
+                        }
+
+                    } else if (data.isTrue == 1) {
+                        alert("有错")
+
+                    }
+                }
+            }
+        );
+    };
+    $(".fa-plus").click(function () {
+
+        $("#form-config-edit").append("<div class='form-group' id='va" + x + "'>\n" +
+            "            <input name='vaId' value='" + x + "' type='hidden'>" +
+            "            <label class='col-sm-2 control-label'>品种：</label>\n" +
+            "              <div class='col-sm-4'>\n" +
+            "                <select id='HyVarieties" + x + "' name='HyVarieties" + x + "' class='form-control m-b HyVarieties' ></select>\n" +
+            "            </div>\n" +
+            "            <label class='col-sm-2 control-label'>数量：</label>\n" +
+            "              <div class='col-sm-4'>\n" +
+            "                  <input id='quantity" + x + "' name=''   class='form-control quantity ' type='number' min='0' required>\n" +
+            "            </div>\n" +
+            "            <div style='position: relative;left: 375px;top: -25px; z-index: -1' id='plus' >\n" +
+            "                <i class='fa fa-minus' id='" + x + "' ></i>\n" +
+            "            </div>\n" +
+            "        </div>");
+
+        $(".HyVarieties").change(function () {
+            var id = $(this).attr("id");
+            var str = $("#" + id).val();
+            var str2 = id.substring(11)
+            console.log(str)
+            $("#quantity" + str2).attr("name", str);
+        })
+
+        x++;
+        $(".fa-minus").click(function () {
+            var w = "va" + $(this).attr("id")
+            $("#" + w).remove();
+        });
+        abc();
+    });
+
+
+    $("#form-config-edit").validate({
+        onkeyup: false,
+        rules: {
+            configKey: {
+                remote: {
+                    url: prefix + "/checkConfigKeyUnique",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        "configId": function () {
+                            return $("#configId").val();
+                        },
+                        "configKey": function () {
+                            return $.common.trim($("#configKey").val());
+                        }
+                    },
+                    dataFilter: function (data, type) {
+                        return $.validate.unique(data);
+                    }
+                }
+            },
+        },
+        messages: {
+            "configKey": {
+                remote: "参数键名已经存在"
+            }
+        },
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit?id=" + $("#userId").val(), $('#form-config-edit').serialize());
+        }
+    }
+</script>
+</body>
+</html>

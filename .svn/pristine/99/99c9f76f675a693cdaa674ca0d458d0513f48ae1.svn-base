@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flyroc.ox_online.project.biz.order.mapper.OrderMapper">
+
+    <resultMap type="Order" id="OrderResult">
+        <result property="order_num"    	  		column="order_num"    />
+        <result property="store_ower"    	  		column="store_ower"    />
+        <result property="store_tel"    	  		column="store_tel"    />
+        <result property="create_time"    	  		column="create_time"    />
+    </resultMap>
+
+    <sql id="selectOrderVo">
+        select h.id,h.order_num,h.user_id,y.store_ower,y.store_tel,y.hy_name,o.sell_anount,h.create_time,h.order_status
+		from
+		hy_order_main h
+		left join
+		hy_store y
+		on h.user_id = y.user_id
+		left join
+		hy_order_detail o
+		on h.order_num = o.order_id
+    </sql>
+
+    <select id="selectOrderList" parameterType="Order" resultType="java.util.Map">
+        <include refid="selectOrderVo"/>
+        <where>
+            <if test="order_num != null and order_num != ''"> and h.order_num like concat('%', #{order_num}, '%')</if>
+            <if test="store_tel != null and store_tel != ''"> and y.store_tel like concat('%', #{store_tel}, '%')</if>
+            <if test="store_ower != null and store_ower != ''"> and y.store_ower like concat('%', #{store_ower}, '%')</if>
+            <if test="status != null and status != ''"> and h.order_status = #{status}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(h.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(h.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+            <if test="optionsRadios != null and optionsRadios != ''">
+                AND date_format(h.create_time,'%y%m%d') &gt;= date_format(#{endDate},'%y%m%d')
+            </if>
+            <if test="optionsRadios != null and optionsRadios != ''">
+                AND date_format(h.create_time,'%y%m%d') &lt;= date_format(#{NowDate},'%y%m%d')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectOrderListById" parameterType="String" resultType="java.util.Map">
+    select
+        h.order_num,y.store_ower,y.store_tel,h.create_time
+	 from
+	 hy_order_main h
+	 LEFT JOIN
+	 hy_store y
+	 on h.user_id = y.user_id
+       where
+       h.id = #{Id}
+
+    </select>
+
+    <select id="selectOrderById" parameterType="Order" resultType="java.util.Map">
+    SELECT
+	hs.store_ower,hs.store_tel,hom.order_num,hod.order_status
+    FROM
+	hy_order_main hom
+	LEFT JOIN
+	hy_order_detail hod
+	on
+	hom.order_num = hod.order_id
+	LEFT JOIN
+	hy_ox ho
+	on
+	ho.ox_id = hod.ox_id
+	LEFT JOIN
+	hy_store hs
+	on
+	hs.user_id = ho.store_id
+	WHERE
+	hom.order_num = #{order_num}
+
+    </select>
+
+</mapper>

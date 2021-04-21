@@ -1,0 +1,5 @@
+package com.flyroc.ox_online.project.biz.activation.domain;
+
+public class Activation {
+
+}

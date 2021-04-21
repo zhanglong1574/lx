@@ -1,0 +1,53 @@
+package com.flyroc.ox_online.project.biz.activation.controller;
+
+import java.util.List;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.flyroc.ox_online.framework.web.controller.BaseController;
+import com.flyroc.ox_online.framework.web.page.TableDataInfo;
+import com.flyroc.ox_online.project.biz.activation.domain.Activation;
+import com.flyroc.ox_online.project.biz.activation.service.ActivationService;
+
+/**
+ * 参数配置 信息操作处理
+ * 
+ * @author ruoyi
+ */
+@Controller
+@RequestMapping("/biz/oxMarket")
+public class ActivationController extends BaseController{
+	private String prefix = "biz/activation";
+
+	@Autowired
+	private ActivationService activationService;
+
+
+	@RequiresPermissions("biz:oxMarket:view")
+	@GetMapping()
+	public String oxMarket(){
+		return prefix + "/list";
+	}
+
+	/**
+	 * 查询参数配置列表
+	 */
+	@RequiresPermissions("system:config:list")
+	@PostMapping("/list")
+	@ResponseBody
+	public TableDataInfo list(Activation activation)
+	{
+		startPage();
+		List<Activation> list = activationService.selectHyOxMarketList(activation);
+		return getDataTable(list);
+	}
+
+
+
+}

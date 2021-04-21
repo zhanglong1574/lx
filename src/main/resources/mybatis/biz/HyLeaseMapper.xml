@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flyroc.ox_online.project.biz.byre.lease.mapper.HyLeaseMapper">
+    
+    <resultMap type="HyLease" id="HyLeaseResult">
+        <result property="recordId"    column="record_id"    />
+        <result property="byreId"    column="byre_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+    </resultMap>
+
+    <sql id="selectHyLeaseVo">
+        select record_id, byre_id, user_id, create_time, start_time, end_time from hy_lease
+    </sql>
+
+    <select id="selectHyLeaseList" parameterType="HyLease" resultMap="HyLeaseResult">
+        <include refid="selectHyLeaseVo"/>
+        <where>  
+            <if test="byreId != null  and byreId != ''"> and byre_id = #{byreId}</if>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectHyLeaseById" parameterType="String" resultMap="HyLeaseResult">
+        <include refid="selectHyLeaseVo"/>
+        where record_id = #{recordId}
+    </select>
+        
+    <insert id="insertHyLease" parameterType="HyLease">
+        insert into hy_lease
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="recordId != null  and recordId != ''">record_id,</if>
+            <if test="byreId != null  and byreId != ''">byre_id,</if>
+            <if test="userId != null  and userId != ''">user_id,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="startTime != null ">start_time,</if>
+            <if test="endTime != null ">end_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="recordId != null  and recordId != ''">#{recordId},</if>
+            <if test="byreId != null  and byreId != ''">#{byreId},</if>
+            <if test="userId != null  and userId != ''">#{userId},</if>
+            <if test="createTime != null ">now(),</if>
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="endTime != null ">#{endTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHyLease" parameterType="HyLease">
+        update hy_lease
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="byreId != null  and byreId != ''">byre_id = #{byreId},</if>
+            <if test="userId != null  and userId != ''">user_id = #{userId},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="startTime != null ">start_time = #{startTime},</if>
+            <if test="endTime != null ">end_time = #{endTime},</if>
+        </trim>
+        where record_id = #{recordId}
+    </update>
+
+    <delete id="deleteHyLeaseById" parameterType="String">
+        delete from hy_lease where record_id = #{recordId}
+    </delete>
+
+    <delete id="deleteHyLeaseByIds" parameterType="String">
+        delete from hy_lease where record_id in 
+        <foreach item="recordId" collection="array" open="(" separator="," close=")">
+            #{recordId}
+        </foreach>
+    </delete>
+    
+</mapper>

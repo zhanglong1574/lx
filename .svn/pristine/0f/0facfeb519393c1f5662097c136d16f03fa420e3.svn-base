@@ -1,0 +1,20 @@
+package com.flyroc.ox_online.project.biz.register.service;
+
+import com.flyroc.ox_online.project.biz.register.domain.Register;
+import com.flyroc.ox_online.project.biz.register.mapper.RegisterMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class RegisterServiceImpI implements IRegisterService {
+
+    @Autowired
+    private RegisterMapper registerMapper;
+
+    @Override
+    public Register selectTurnoverMassage( ) {
+//        Register register = new Register();
+//        register.setMarket_id();
+        return registerMapper.selectTurnoverMassage();
+    }
+}

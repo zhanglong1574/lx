@@ -1,0 +1,32 @@
+package com.flyroc.ox_online.project.biz.order.controller;
+
+import com.flyroc.ox_online.framework.web.controller.BaseController;
+import com.flyroc.ox_online.project.biz.order.service.OrderService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+/**
+ * 用户信息
+ * 
+ * @author ruoyi
+ */
+@Controller
+@RequestMapping("/biz/hyOrder")
+public class OrderController extends BaseController
+{
+    private String prefix = "biz/order";
+
+    @Autowired
+    private OrderService userService;
+
+
+    @RequiresPermissions("system:user:view")
+    @GetMapping()
+    public String user()
+    {
+        return prefix + "/order";
+    }
+
+}

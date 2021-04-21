@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增办卡激活')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-oxMarket-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">店铺名：</label>
+                <div class="col-sm-8">
+                    <input name="hyName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">店主姓名：</label>
+                <div class="col-sm-8">
+                    <input name="storeOwer" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">所在地：</label>
+                <div class="col-sm-8">
+                    <input name="storeAddress" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">身份证号：</label>
+                <div class="col-sm-8">
+                    <input name="card" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">店铺电话：</label>
+                <div class="col-sm-8">
+                    <input name="storeTel" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否激活，：</label>
+                <div class="col-sm-8">
+                    <input name="isActivate" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "biz/oxMarket"
+        $("#form-oxMarket-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-oxMarket-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

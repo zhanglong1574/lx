@@ -1,0 +1,43 @@
+package com.flyroc.ox_online.project.biz.activation.mapper;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.flyroc.ox_online.project.biz.activation.domain.Activation;
+import com.flyroc.ox_online.project.biz.activation.domain.Str;
+
+/**
+ * 办卡激活Mapper接口
+ * 
+ * @author ruoyi
+ */
+public interface ActivationMapper{
+	
+    
+    /**
+     * 查询
+     */
+	public List<Activation> selectHyOxMarketList(Activation activation);
+	
+	 /**
+     * 查看显示
+     */
+	public List<Activation> selectHyOxMarketById(String userId);
+	
+	// 查询赛事奖品
+	public List<HashMap<String,Object>> selectHyOxMarketCount();
+	// 查询赛事奖品
+	public List<HashMap<String,Object>> selectHyOxMarketMax();
+	// 查询赛事奖品
+	public List<HashMap<String,Object>> selectHyOxMarketMin();
+	
+	public List<HashMap<String,Object>> selectvarieties(Str str);
+	public HashMap<String,Object> selectmarket(Str str);
+	
+	public List<Activation> selectkh(Activation activation);
+	
+	public int updateHystore(Activation str);
+
+	public List<Activation> selectRegisterById(String user_id);
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改办卡激活')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <div class="col-sm-6" style="width: 80%;">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h4>市场办卡人数统计图</h4>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="echarts" id="echarts-bar-chart"></div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: echarts-js" />
+    <script th:inline="javascript">
+   
+    $(function(){
+    	var barChart = echarts.init(document.getElementById("echarts-bar-chart"));
+        var baroption = {
+            title : {
+                text: '市场办卡人数'
+            },
+            tooltip : {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['办卡人数']
+            },
+            grid:{
+                y2:24
+            },
+            calculable : true,
+            xAxis : [
+                {
+                    type : 'category',
+                    data : /*[[${time}]]*/ 'Sebastian'
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series : [
+                {
+                    name: '办卡人数',
+                    type: 'bar',
+                    data: /*[[${count}]]*/ 'Sebastian',
+                    markPoint : {
+                        data : [
+                            {name : '最高', value : /*[[${ax}]]*/ 'Sebastian', xAxis: /*[[${max}]]*/ 'Sebastian', yAxis: /*[[${ax}]]*/ 'Sebastian' + 1},
+                            {name : '最低', value : /*[[${in}]]*/ 'Sebastian',   xAxis: /*[[${min}]]*/ 'Sebastian', yAxis: /*[[${in}]]*/ 'Sebastian' + 1}
+                        ]
+                    },
+                }
+            ]
+        };
+        barChart.setOption(baroption);
+
+        window.onresize = barChart.resize;
+    })
+    
+     function submitHandler() {
+        	var index = parent.layer.getFrameIndex(window.name);
+        	parent.layer.close(index);
+        }
+    
+    </script>
+</body>
+</html>

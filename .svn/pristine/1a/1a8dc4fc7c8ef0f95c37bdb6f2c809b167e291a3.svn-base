@@ -1,0 +1,25 @@
+package com.flyroc.ox_online.project.biz.register.mapper;
+
+import com.flyroc.ox_online.project.biz.register.domain.Register;
+
+import java.util.HashMap;
+import java.util.List;
+
+public interface RegisterMapper {
+    public List<Register> selectTurnoverMassage();
+
+    // 查询赛事奖品
+    public List<HashMap<String, Object>> selectHyOxMarketCount();
+
+    // 查询赛事奖品
+    public List<HashMap<String, Object>> selectHyOxMarketMax();
+
+    // 查询赛事奖品
+    public List<HashMap<String, Object>> selectHyOxMarketMin();
+
+    // 查询赛事奖品
+    public List<HashMap<String, Object>> selectHyOxMarketMax1();
+
+    // 查询赛事奖品
+    public List<HashMap<String, Object>> selectHyOxMarketMin1();
+}

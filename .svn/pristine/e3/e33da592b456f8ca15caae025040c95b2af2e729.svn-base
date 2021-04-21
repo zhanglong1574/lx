@@ -1,0 +1,56 @@
+package com.flyroc.ox_online.project.biz.exChange.domain;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import com.flyroc.ox_online.framework.web.domain.BaseEntity;
+
+public class SelectAll extends BaseEntity implements Serializable{
+	
+	private String hy_name;
+	private String store_ower;
+	private String store_tel;
+	private int sumhy;
+	private Date cam;
+	private Date sam;
+	
+	
+	public Date getCam() {
+		return cam;
+	}
+	public void setCam(Date cam) {
+		this.cam = cam;
+	}
+	public Date getSam() {
+		return sam;
+	}
+	public void setSam(Date sam) {
+		this.sam = sam;
+	}
+	public String getHy_name() {
+		return hy_name;
+	}
+	public void setHy_name(String hy_name) {
+		this.hy_name = hy_name;
+	}
+	public String getStore_ower() {
+		return store_ower;
+	}
+	public void setStore_ower(String store_ower) {
+		this.store_ower = store_ower;
+	}
+	public String getStore_tel() {
+		return store_tel;
+	}
+	public void setStore_tel(String store_tel) {
+		this.store_tel = store_tel;
+	}
+	public int getSumhy() {
+		return sumhy;
+	}
+	public void setSumhy(int sumhy) {
+		this.sumhy = sumhy;
+	}
+	
+	
+}

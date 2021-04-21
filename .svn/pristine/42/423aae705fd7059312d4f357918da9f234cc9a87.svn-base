@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flyroc.ox_online.project.biz.order.mapper.OrderMapper">
+
+    <resultMap type="Order" id="OrderResult">
+        <id     property="id"      	  		column="id"      />
+        <result property="order_num"    	  		column="order_num"    />
+    </resultMap>
+
+    <sql id="selectOrderVo">
+        select h.id,h.order_num,h.user_id,y.store_ower,y.store_tel,y.hy_name,o.sell_anount,h.create_time,h.order_status
+		from
+		hy_order_main h
+		left join
+		hy_store y
+		on h.user_id = y.user_id
+		left join
+		hy_order_detail o
+		on h.order_num = o.order_id
+    </sql>
+
+    <select id="selectOrderList" parameterType="Order" resultType="java.util.Map">
+        <include refid="selectOrderVo"/>
+        <where>
+            1=1
+        </where>
+    </select>
+
+</mapper>

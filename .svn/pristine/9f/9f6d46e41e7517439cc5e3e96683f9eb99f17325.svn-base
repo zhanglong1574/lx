@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('岗位列表')" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="post-form">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            订单单号：<input type="text" name="order_num" id="order_num"/>
+                        </li>
+                        <li>
+                            用户电话：<input type="text" name="store_tel" id="store_tel"/>
+                        </li>
+                        <li>
+                            用户姓名：<input type="text" name="store_ower" id="store_ower"/>
+                        </li>
+                        <li class="select-time">
+                            <label>下单时间： </label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+                        </li>
+                        <li>
+                        <!--因为字典表里没有这些字段，所以貌似只能写成死的了-->
+                            订单状态：<select name="status" th:with="type=${@dict.getType('sys_show_hide')}">
+                            <option value="">所有</option>
+                            <option value="1">待处理</option>
+                            <option value="2">待确认</option>
+                            <option value="3">现场交易</option>
+                            <option value="4">已完成</option>
+                            <option value="5">申请取消</option>
+                            <option value="6">已取消</option>
+                            <option value="7">申诉</option>
+                        </select>
+                        </li>
+                        <li>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="col-sm-12" style="margin: 5px 0">
+                                        <input type="radio" value="three_day" id="optionsRadios1" name="optionsRadios" style=" width: 15px;height: 10px">
+                                        <label for="optionsRadios1">三天内</label>
+                                        <input type="radio" value="one_week" id="optionsRadios2" name="optionsRadios" style=" width: 15px;height: 10px">
+                                        <label for="optionsRadios2">一周内</label>
+                                        <input type="radio" value="one_month" id="optionsRadios3" name="optionsRadios" style=" width: 15px;height: 10px">
+                                        <label for="optionsRadios3">一月内</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i> 搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:post:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:post:remove')}]];
+    var datas = [[${@dict.getType('sys_normal_disable')}]];
+    var prefix = ctx + "biz/hyOrder";
+
+    //     createUrl: prefix + "/add",
+    //     updateUrl: prefix + "/edit/{id}",
+    //     exportUrl: prefix + "/export",
+    //     modalName: "岗位",
+    $(function() {
+        var options = {
+            url: prefix + "/list",
+            updateUrl: prefix + "/edit/{id}",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'order_num',
+                    title: '订单号'
+                },
+                {
+                    field: 'store_ower',
+                    title: '用户姓名',
+                    sortable: true
+                },
+                {
+                    field: 'store_tel',
+                    title: '联系电话',
+                    sortable: true
+                },
+                {
+                    field: 'hy_name',
+                    title: '用户昵称',
+                    sortable: true
+                },
+                {
+                    field: 'sell_anount',
+                    title: '购买数量',
+                    sortable: true
+                },
+                {
+                    field: 'create_time',
+                    title: '下单时间',
+                    sortable: true
+                },
+                {
+                    field: 'status',
+                    title: '状态',
+                    align: 'center'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        //订单状态（1：待处理；2：待确认；3：现场交易；4：已完成；5：申请退款；6：已取消；7：申诉）
+
+                        if (row.order_status == 1){
+                            actions.push('<a class="btn btn-info btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')">处理</a> ');
+                        }
+                        else if (row.order_status == 3){
+                            actions.push('<a class="btn btn-warning btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')">交易</a> ');
+                        }
+                        else if (row.order_status == 5){
+                            actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')">审核</a> ');
+                        }
+                        else if (row.order_status == 7){
+                            actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')">受理</a> ');
+                        }
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')">查看</a> ');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+    // 重置
+    function uncheck(){
+        $(".col-sm-12").children("input").attr('checked',false);
+        $("#order_num").val()
+        $("#store_tel").val()
+        $("#store_ower").val()
+    }
+</script>
+</body>
+</html>

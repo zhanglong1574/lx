@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('订单信息查看')" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">牛编号：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="" id="ox_num" readonly="readonly" class="form-control" placeholder="请输入文本">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">品种遍号：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="" id="ox_type_id" readonly="readonly" class="form-control" placeholder="请输入文本">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">原价：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="" id="normal_price" readonly="readonly" class="form-control" placeholder="请输入文本">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">重量：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="" id="weight" readonly="readonly" class="form-control" placeholder="请输入文本">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">分类：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="" id="classify" readonly="readonly" class="form-control" placeholder="请输入文本">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">年龄：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="" id="age" readonly="readonly" class="form-control" placeholder="请输入文本">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">店铺名：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="" id="hy_name" readonly="readonly" class="form-control" placeholder="请输入文本">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">店主名：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="" id="store_ower" readonly="readonly" class="form-control" placeholder="请输入文本">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">手机号：</label>
+                <div class="col-sm-9">
+                    <input type="text" name="" id="store_tel" readonly="readonly" class="form-control" placeholder="请输入文本">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer" />
+<script type="text/javascript">
+    var prefix = ctx + "biz/hyOrder"
+    $(document).ready(function(){
+        msg()
+    })
+    function msg(){
+        $.ajax({
+            url: prefix + "/msg",
+            type: "POST",
+            async: true,
+            dataType: "json",
+
+            success: function(msg) {
+                  $("#ox_num").val(msg.a[0].ox_num)
+                  $("#ox_type_id").val(msg.a[0].ox_type_id)
+                  $("#normal_price").val(msg.a[0].normal_price)
+                  var aa = msg.weight[0].prop_val
+                  var weight = aa+"斤"
+                  $("#weight").val(weight)
+                  $("#classify").val(msg.classify[0].prop_val)
+                  $("#age").val(msg.age[0].prop_val)
+                  $("#hy_name").val(msg.store[0].hy_name)
+                  $("#store_ower").val(msg.store[0].store_ower)
+                  $("#store_tel").val(msg.store[0].store_tel)
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

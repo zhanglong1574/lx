@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+<th:block th:include="include :: header('定时任务列表')" />
+</head>
+<body class="gray-bg">
+	<div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="job-form">
+					<div class="select-list">
+						<ul>
+							<li><input type="hidden" name="store_ower" id="store_ower"
+								maxlength="10" /></li>
+							<li>用户姓名：<input type="text" name="store_ower"
+								id="store_ower" maxlength="10" />
+							</li>
+							<li>用户电话：<input type="text" name="store_tel" id="store_tel"
+								maxlength="11" />
+							</li>
+							<li>
+								<p style="width: 80px">选择日期：</p> <input type="text"
+								class="time-input" placeholder="日期" lay-key="5" id="date"
+								name="date">
+							</li>
+							<li><label class="radio-box"><input type="radio"
+									checked="checked" value="option1" id="optionsRadios1"
+									name="opt"
+									style="width: 70px; margin-left: 10px; position: absolute; opacity: 0;">
+								<ins class="iCheck-helper"
+										style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>三天内</label>
+								<label class="radio-box"><input type="radio"
+									value="option2" id="optionsRadios2" name="opt"
+									style="width: 70px; position: absolute; opacity: 0;">
+								<ins class="iCheck-helper"
+										style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>一周内</label>
+								<label class="radio-box"><input type="radio"
+									value="option3" id="optionsRadios3" name="opt"
+									style="width: 70px; position: absolute; opacity: 0;">
+								<ins class="iCheck-helper"
+										style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>一月内</label>
+							</li>
+							<li><a class="btn btn-primary btn-rounded btn-sm"
+								onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm"
+								onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+
+			<div class="btn-group-sm" id="toolbar" role="group">
+				<button type="button" class="btn btn-primary" onclick="jiaoyi();">交易打印卡</button>
+
+				<a class="btn btn-warning" onclick="huizong();"> <i
+					class="fa fa-download"></i> 汇总
+				</a> <a class="btn btn-info" onclick=""> <i class="fa fa-list"></i>
+					统计
+				</a>
+			</div>
+
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table"></table>
+			</div>
+		</div>
+	</div>
+	<th:block th:include="include :: footer" />
+	<script th:inline="javascript">
+	
+	//匯總代碼
+    function huizong(){
+    	var prefixShow = ctx + "biz/exchange";
+		$.modal.open('汇总', prefixShow + "/form");
+	}
+    
+	//二級顯示接口
+    function sells(flag){
+    	var prefixShow = ctx + "biz/exchange";
+    	var btn = ['<i class="fa fa-close"></i> 确定', '<i class="fa fa-close"></i> 关闭'];
+		var options = {
+			title: '查看',
+			width: "1550",
+			height: "900",
+			url: prefixShow + "/selShow/?stus="+flag,
+			btn: btn
+		};
+		$.modal.openOptions(options);  	
+    }
+    
+	//交易按鈕
+    function jiaoyi(){
+    	var prefixShow = ctx + "biz/exchange";
+    	var btn = ['<i class="fa fa-check" onclick="print();"></i> 打印', '<i class="fa fa-close"></i> 关闭'];
+		var options = {
+			title: '交易凭证打印',
+			width: "700",
+			height: "520",
+			url: prefixShow + "/print",
+			btn: btn,
+			callBack: doSubmit
+		};
+		$.modal.openOptions(options);
+	}
+    function doSubmit(index, layero) {
+    	//alert("进入了自定义选项提交方法");
+    	 var body = layer.getChildFrame('body', index);//获取子页面内容
+    	 var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+    	 body.find("#prt").click();//执行子页面的方法
+    }  
+    
+	
+        var detailFlag = [[${@permission.hasPermi('ecag:job:detail')}]];
+		var prefix = ctx + "biz/exchange";
+
+		//初始化列表
+		$(function() {
+		    var options = {
+		        url: prefix + "/listShow",
+                //updateUrl: prefix + "/selShow/{id}",
+                removeUrl: prefix + "/remove",
+		        sortName: "",
+		        sortOrder: "desc",
+		        modalName: "任务",
+		        columns: [{
+		            checkbox: true
+		        },
+		        {
+		            field: 'stus',
+		            title: 'id',
+		            visible: false
+		        },
+		        {
+		            field: 'hy_name',
+		            title: '店铺名'
+		        },
+		        {
+		            field: 'store_ower',
+		            title: '用户姓名',
+		        },
+		        {
+		            field: 'store_tel',
+		            title: '用户电话',
+
+		        },
+		        {
+		            field: 'sumhy',
+		            title: '交易牛数',
+		        },
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		                var actions = [];
+		                actions.push('<a class="btn btn-warning btn-xs ' + detailFlag + '" onclick="sells(\'' + row.stus + '\')"><i class="fa fa-search"></i>查看</a> ');
+		                return actions.join('');
+		            }
+		        }]
+		    };
+		    $.table.init(options);
+		});
+		
+		//監聽事件
+		var keys = [];//记录输入的数组
+ 		document.onkeydown=function(event){
+            var e = event || window.event || arguments.callee.caller.arguments[0];  
+            if(e.keyCode >= 48 && e.keyCode <= 57 || e.keyCode >= 65 && e.keyCode <= 90 || e.keyCode==13){
+            	if(e && e.keyCode==13){ // enter 键
+                    //要做的事情
+                    /* for (var i = 0; i < keys.length; i++) {
+   						alert(keys[i]);
+   					} */		
+       	         	var prefixShow = ctx + "biz/exchange";
+    	   	     	var btn = ['<i class="fa fa-check" onclick="print();"></i> 打印', '<i class="fa fa-close"></i> 关闭'];
+    	   	 		var options = {
+    	   	 			title: '新增交易信息',
+    	   	 			width: "900",
+    	   	 			height: "720",
+    	   	 			url: prefixShow + "/AddMess/?keys="+keys.join(''),
+    	   	 			btn: btn,
+    	   	 			callBack: doSubmit1
+    	   	 		};
+    	   	 		$.modal.openOptions(options);
+    	   	 		
+    	   	 		keys.length = 0;
+   	            }else{
+   	            	keys.push(String.fromCharCode(e.keyCode));
+   	                console.log(e.keyCode);
+   	            }
+            }else{
+            	//$.modal.alertWarning('不要输入除英文和数字的其他东西！');
+            }
+        };  
+        function doSubmit1(index, layero) {
+        	//alert("进入了自定义选项提交方法");
+        	 var body = layer.getChildFrame('body', index);//获取子页面内容
+        	 var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+        	 body.find("#btAdd").click();//执行子页面的方法
+        }  
+		
+		/* function searchDind() {
+			var opt = $("input[name=opt]:checked").val();
+			var store_ower = $("#store_ower").val();
+			var store_tel = $("#store_tel").val();
+			var date = $("#date").val();
+			alert(store_ower +store_tel+date)
+
+			$.ajax({
+				url:prefix + "/listShowLike",
+	    	    dataType:"json",
+	    	    data:{"opt":opt,"store_ower":store_ower,"store_tel":store_tel,"date":date},
+	    	    type:"get",
+	    	    success:function(data){
+	    	        $("#bootstrap-table").html();
+	    	        alert("as")
+	    	        for (var i = 0; i < data.lst.length; i++) {
+	    	        	$("tboty").append('<tr data-index="'+i+'"><td class="+bs-checkbox"><input data-index="'+i+'" name="btSelectItem" type="checkbox"></td><td style="">'+data.lst[i][hy_name]+'</td><td style="">'+data.lst[i][store_ower]+'</td><td style="">'+data.lst[i][hy_store]+'</td><td style="">'+data.lst[i][sumhy]+'</td><td style="text-align: center; "><a class="btn btn-warning btn-xs " href="javascript:void(0)" onclick="$.operate.detail("undefined")"><i class="fa fa-search"></i>详细</a> </td></tr>')
+					}
+	    	    }
+			});
+			
+		} */
+
+	</script>
+</body>
+</html>

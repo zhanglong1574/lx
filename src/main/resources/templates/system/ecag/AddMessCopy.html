@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:include="include :: header('新增用户')" />
+</head>
+<body>
+	<div class="main-content">
+		<form id="form-user-add" class="form-horizontal" style="padding: 40px">
+			<div class="row" style="display: flex;">
+				<div class="col-sm-6" style="margin: 0px auto;">
+					<div class="form-group">
+						<label class="col-sm-4 control-label"><span
+							style="color: red;">*</span>手机号：</label>
+						<div class="col-sm-8">
+							<input name="phonenumber" placeholder="手机号" class="form-control"
+								type="text" id="store_tel" readonly="readonly">
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6" style="margin: 0px auto;">
+					<div class="form-group">
+						<label class="col-sm-4 control-label"><span
+							style="color: red;">*</span>姓名：</label>
+						<div class="col-sm-8">
+							<input name="phonenumber" placeholder="姓名" class="form-control"
+								type="text" id="store_ower" readonly="readonly">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label"><span
+							style="color: red;" readonly="readonly">*</span>身份证：</label>
+						<div class="col-sm-8">
+							<input name="phonenumber" placeholder="总人数" class="form-control"
+								type="text" id="card" readonly="readonly">
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label"><span
+							style="color: red;" readonly="readonly">*</span>所在地：</label>
+						<div class="col-sm-8">
+							<input name="email" class="form-control" type="text"
+								placeholder="进场头数" id="store_address" readonly="readonly">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label readonly="readonly" class="col-sm-4 control-label"><span
+							style="color: red;">*</span>卡号：</label>
+						<div class="col-sm-8">
+							<input name="loginName" placeholder="交易总数" class="form-control"
+								type="text" id="card_id" readonly="readonly">
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label"><span
+							style="color: red;" readonly="readonly">*</span>买家电话：</label>
+						<div class="col-sm-8">
+							<input name="phonenumber" placeholder="买家电话" class="form-control"
+								type="text" id="sell_tel" readonly="readonly">
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label"><span
+							style="color: red;" readonly="readonly">*</span>总服务费：</label>
+						<div class="col-sm-8">
+							<input name="phonenumber" placeholder="总服务费" class="form-control"
+								type="text" id="byzr" readonly="readonly">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row" id="caseRow1" call="caseRow1">
+				<div class="col-sm-6" style="width: 32%">
+					<div class="form-group">
+						<label class="col-sm-4 control-label"><span
+							style="color: red;" readonly="readonly">*</span>品种：</label>
+						<div class="col-sm-8">
+							<select class="form-control" id="varieties_name"
+								onchange="vnAc();">
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6" style="width: 32%">
+					<div class="form-group">
+						<label class="col-sm-4 control-label"><span
+							style="color: red;" readonly="readonly">*</span>数量：</label>
+						<div class="col-sm-8">
+							<input name="email" class="form-control" type="number"
+								placeholder="数量" id="bynm" onchange="fieBynm();">
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6" style="width: 32%">
+					<div class="form-group">
+						<label class="col-sm-4 control-label"><span
+							style="color: red;" readonly="readonly">*</span>服务费：</label>
+						<div class="col-sm-8">
+							<input name="email" class="form-control" type="text"
+								placeholder="服务费" id="byvr" readonly="readonly">
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6" style="width: 3%">
+					<div class="form-group">
+						<div class="col-sm-8" id="Selindex">
+							<input type="button" value="+" id="btry" onclick="addbtry();">
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</form>
+		<input type="text" id="user_id" style="display: none"> 
+		<input type="text" id="service_center" style="display: none"> 
+		<input type="text" id="car_num" style="display: none"> 
+		<input type="text" id="cardCopy" style="display: none"> 
+		<input type="text" id="bystID" style="display: none"> 
+		<input type="button" id="btUpdate" onclick="btUpdate();" style="display: none"> 
+		<input type="button" id="printf" onclick="printf();" style="display: none">
+	</div>
+	<th:block th:include="include :: footer" />
+	<script type="text/javascript">
+	var prefix = ctx + "biz/exchange";
+	
+	//初始化加载三级页面
+	$(function(){
+			$.ajax({
+				url:prefix + "/AddMessCopy",
+	    	    dataType:"json",
+	    	    type:"get",
+	    	    success:function(data){
+    	    		$("#store_tel").val(data.lst3[0]['store_tel']);
+	    	    	$("#store_ower").val(data.lst3[0]['store_ower']);
+	    	    	$("#card").val(data.lst3[0]['card']);
+	    	    	$("#card_id").val(data.lst3[0]['card_id']);
+	    	    	$("#store_address").val(data.lst3[0]['store_address']);
+	    	    	$("#bynm").val(data.lst3[0]['bynm']);
+	    	    	$("#byvr").val(data.lst3[0]['byvr']);
+	    	    	$("#byzr").val(data.lst3[0]['byvr']);
+	    	    	
+	    	    	$("#sell_tel").val(data.lst3[0]['sell_tel']);
+	    	    	for (var i = 0; i < data.lst2.length; i++) {
+	    	    		if(data.lst2[i]['varieties_name'] == data.lst3[0]['varieties_name']){
+	    	    			$("#varieties_name").append('<option value="789" selected  =  "selected" acid="'+data.lst2[i]['varieties_id']+'" acc1="'+data.lst2[i]['service_fee']+'"  acc2="'+data.lst2[i]['before_price']+'">'+data.lst2[i]['varieties_name']+'</option>')
+	    	    		}else{
+	    	    			$("#varieties_name").append('<option value="789" acid="'+data.lst2[i]['varieties_id']+'" acc1="'+data.lst2[i]['service_fee']+'"  acc2="'+data.lst2[i]['before_price']+'">'+data.lst2[i]['varieties_name']+'</option>')
+	    	    		}
+					}
+	    	    	if(data.boo){
+	    	    		$("#Selindex").html('<a class="btn btn-info btn-xs" href="javascript:void(0)" onclick="onSelPage();"><i class="fa fa-key"></i>查找</a>');
+	    	    	}
+	    	    }
+			});
+
+		});
+
+	//select变化联动
+		function vnAc(){
+			var acc1 = $("#varieties_name").find("option:selected").attr("acc1");
+			var acc2 = $("#varieties_name").find("option:selected").attr("acc2");
+			$("#byvr").val( $("#bynm").val() * acc1 );
+			$("#byzr").val( $("#bynm").val() * acc1 );
+		} 
+		//数字变化联动
+		function fieBynm(){
+			if($("#bynm").val() <= 0 ){
+				$("#bynm").val("");
+				$.modal.alertWarning('请输入大于0的整数！');
+				return false;
+			}
+			
+			var acc1 = $("#varieties_name").find("option:selected").attr("acc1");
+			var acc2 = $("#varieties_name").find("option:selected").attr("acc2");
+			
+			$("#byvr").val( $("#bynm").val() * acc1);
+			$("#byzr").val( $("#bynm").val() * acc1);
+		}
+		
+		//更新操作
+		function btUpdate(index, layero){
+			if($("#bynm").val()==null || $("#bynm").val()==""){
+				$.modal.alertWarning('请输入数量！');
+				return false;
+			}
+			var byzr = $("#byzr").val();	//服务综费
+			var bynm = $("#bynm").val();	//数量
+			var byvr = $("#byvr").val();	//服务费
+			var acid = $("#varieties_name").find("option:selected").attr("acid");
+
+			$.ajax({
+				url:prefix + "/AddMessCopyUpdate",
+	    	    dataType:"json",
+	    	    async:true,
+	    	    data:{"acid":acid,"bynm":bynm},
+	    	    type:"get",
+	    	    success:function(data){
+	    	    	$.modal.msgReload("修改成功,正在刷新数据请稍后……", modal_status.SUCCESS);
+	    	    }
+			});
+		}
+	    
+		//四级页面接口
+		function onSelPage(){
+			var prefixShow = ctx + "biz/exchange";
+	    	var btn = ['<i class="fa fa-check" onclick="print();"></i> 确定', '<i class="fa fa-close"></i> 关闭'];
+			var options = {
+				title: '查看',
+				width: "1200",
+				height: "600",
+				url: prefixShow + "/onSelPage",
+				btn: btn,
+				callBack: doSubmit
+			};
+			$.modal.openOptions(options);
+		}
+		function doSubmit(index, layero) {
+	    	//alert("进入了自定义选项提交方法");
+	    	 var body = layer.getChildFrame('body', index);//获取子页面内容
+	    	 var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+	    	 body.find("#prt").click();//执行子页面的方法
+	    }  
+		
+		//打印接口
+		function printf(index, layero){
+			alert("s")
+			var prefixShow = ctx + "biz/exchange";
+	    	var btn = ['<i class="fa fa-check" onclick="print();"></i> 打印', '<i class="fa fa-close"></i> 关闭'];
+			var options = {
+				title: '查看',
+				width: "1200",
+				height: "600",
+				url: prefixShow + "/printf",
+				btn: btn,
+				callBack: doSubmitprintf
+			};
+			$.modal.openOptions(options);
+		}
+		function doSubmitprintf(index, layero) {
+	    	//alert("进入了自定义选项提交方法");
+	    	 var body = layer.getChildFrame('body', index);//获取子页面内容
+	    	 var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+	    	 body.find("#prt").click();//执行子页面的方法
+	    } 
+
+	</script>
+</body>
+</html>

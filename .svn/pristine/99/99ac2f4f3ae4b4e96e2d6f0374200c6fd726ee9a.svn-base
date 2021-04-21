@@ -1,0 +1,57 @@
+package com.flyroc.ox_online.project.biz.order.controller;
+
+import com.flyroc.ox_online.framework.web.controller.BaseController;
+import com.flyroc.ox_online.framework.web.page.TableDataInfo;
+import com.flyroc.ox_online.project.biz.order.domain.Order;
+import com.flyroc.ox_online.project.biz.order.service.IOrderService;
+import com.flyroc.ox_online.project.system.post.domain.Post;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.aspectj.weaver.ast.Or;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * 用户信息
+ *
+ * @author ruoyi
+ */
+@Controller
+@RequestMapping("/biz/hyOrder")
+public class OrderController extends BaseController
+{
+    private String prefix = "/biz/order";
+
+    @Autowired
+    private IOrderService orderService;
+
+
+    @RequiresPermissions("system:user:view")
+    @GetMapping()
+    public String user()
+    {
+        return prefix + "/order";
+    }
+
+    /**
+     * 新增岗位
+     */
+    @GetMapping("/add")
+    public String add()
+    {
+        return prefix + "/add";
+    }
+
+
+    @PostMapping("/list")
+    @ResponseBody
+    public TableDataInfo list(Order order)
+    {
+        startPage();
+        List<Order> list = orderService.selectOrderList(order);
+        return getDataTable(list);
+    }
+
+}

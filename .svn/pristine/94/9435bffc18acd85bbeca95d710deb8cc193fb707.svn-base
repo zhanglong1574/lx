@@ -1,0 +1,113 @@
+package com.flyroc.ox_online.project.biz.byre.controller;
+
+import com.flyroc.ox_online.common.utils.poi.ExcelUtil;
+import com.flyroc.ox_online.framework.aspectj.lang.annotation.Log;
+import com.flyroc.ox_online.framework.aspectj.lang.enums.BusinessType;
+import com.flyroc.ox_online.framework.web.controller.BaseController;
+import com.flyroc.ox_online.framework.web.domain.AjaxResult;
+import com.flyroc.ox_online.framework.web.page.TableDataInfo;
+import com.flyroc.ox_online.project.biz.byre.domain.HyByre;
+import com.flyroc.ox_online.project.biz.byre.service.IHyByreService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+
+@Controller
+@RequestMapping("/biz/byre")
+public class HyByreController extends BaseController {
+    private String prefix = "biz/byre";
+
+    @Autowired
+    private IHyByreService hyByreService;
+
+    @RequiresPermissions("biz:byre:view")
+    @GetMapping()
+    public String byre() {
+        return prefix + "/list";
+    }
+
+    /**
+     * 查询牛棚信息列表
+     */
+    @RequiresPermissions("biz:byre:list")
+    @PostMapping("/list")
+    @ResponseBody
+    public TableDataInfo list(HyByre hyByre) {
+        startPage();
+        List<HyByre> list = hyByreService.selectHyByreList(hyByre);
+        return getDataTable(list);
+    }
+
+    /**
+     * 导出牛棚信息列表
+     */
+    @RequiresPermissions("biz:byre:export")
+    @Log(title = "牛棚信息", businessType = BusinessType.EXPORT)
+    @PostMapping("/export")
+    @ResponseBody
+    public AjaxResult export(HyByre hyByre) {
+        List<HyByre> list = hyByreService.selectHyByreList(hyByre);
+        ExcelUtil<HyByre> util = new ExcelUtil<HyByre>(HyByre.class);
+        return util.exportExcel(list, "byre");
+    }
+
+    /**
+     * 新增牛棚信息
+     */
+    @GetMapping("/add")
+    public String add() {
+        return prefix + "/add";
+    }
+
+    /**
+     * 新增保存牛棚信息
+     */
+    @RequiresPermissions("biz:byre:add")
+    @Log(title = "牛棚信息", businessType = BusinessType.INSERT)
+    @PostMapping("/add")
+    @ResponseBody
+    public AjaxResult addSave(HyByre hyByre) {
+        return toAjax(hyByreService.insertHyByre(hyByre));
+    }
+
+    /**
+     * 修改牛棚信息
+     */
+    @GetMapping("/edit/{byreId}")
+    public String edit(@PathVariable("byreId") String byreId, ModelMap mmap) {
+        HyByre hyByre = hyByreService.selectHyByreById(byreId);
+        mmap.put("hyByre", hyByre);
+        return prefix + "/edit";
+    }
+
+    /**
+     * 修改保存牛棚信息
+     */
+    @RequiresPermissions("biz:byre:edit")
+    @Log(title = "牛棚信息", businessType = BusinessType.UPDATE)
+    @PostMapping("/edit")
+    @ResponseBody
+    public AjaxResult editSave(HyByre hyByre) {
+        return toAjax(hyByreService.updateHyByre(hyByre));
+    }
+
+    /**
+     * 删除牛棚信息
+     */
+    @RequiresPermissions("biz:byre:remove")
+    @Log(title = "牛棚信息", businessType = BusinessType.DELETE)
+    @PostMapping("/remove")
+    @ResponseBody
+    public AjaxResult remove(String ids) {
+        return toAjax(hyByreService.deleteHyByreByIds(ids));
+    }
+
+}

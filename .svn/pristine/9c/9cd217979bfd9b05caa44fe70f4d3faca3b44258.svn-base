@@ -1,0 +1,48 @@
+package com.flyroc.ox_online.project.biz.activation.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.flyroc.ox_online.project.biz.activation.domain.Activation;
+import com.flyroc.ox_online.project.biz.activation.mapper.ActivationMapper;
+
+/**
+ * 办卡激活Service业务层处理
+ * 
+ * @author ruoyi
+ */
+@Service
+public class ActivationServiceImpl implements ActivationService{
+	
+    @Autowired
+    private ActivationMapper ActivationMapper;
+
+
+	/**
+     * 查询办卡激活列表
+     * 
+     * @param hyOxMarket 办卡激活
+     * @return 办卡激活
+     */
+	@Override
+	public List<Activation> selectHyOxMarketList(Activation activation) {
+		// TODO Auto-generated method stub
+		List<Activation> list = ActivationMapper.selectHyOxMarketList(activation);
+		int a = 0;
+		for (Activation activation1 : list) {
+			if(activation1.getIsActivate().equals("0")) {
+				list.get(a).setIsActivate("未激活");
+			}else {
+				list.get(a).setIsActivate("已激活");
+			}
+			a++;
+		}
+		return list;
+	}
+    
+    
+
+   
+}

@@ -1,0 +1,10 @@
+package com.flyroc.ox_online.project.biz.register.service;
+
+import com.flyroc.ox_online.project.biz.register.domain.Register;
+
+import java.util.List;
+
+public interface IRegisterService {
+    public List<Register> selectTurnoverMassage();
+}
+

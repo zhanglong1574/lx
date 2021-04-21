@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改牛棚信息')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-byre-edit" th:object="${hyByre}">
+        <input name="recordId" th:field="*{byreId}" type="hidden" >
+        <div class="form-group">
+            <label class="col-sm-3 control-label">租赁者电话：</label>
+            <div class="col-sm-8">
+                <input id="userId" name="userId" class="form-control" type="number" maxlength="11">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">租赁者姓名：</label>
+            <div class="col-sm-8">
+                <input id="storeOwer" name="storeOwer" class="form-control" type="text" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">开始时间：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="startTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">结束时间：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input name="endTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "biz/byre";
+    $("#form-byre-edit").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-byre-edit').serialize());
+        }
+    }
+
+    $("#userId").change(function () {
+        var num = $("#userId").val();
+        $.ajax({
+                url: prefix + '/infoSaves.do',
+                type: 'POST',
+                data: {
+                    "storeTel": num
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.isTrue == 2) {
+                        $("#storeOwer").val(data.userId)
+
+                    }
+                }
+
+            }
+        );
+    })
+
+
+    $("input[name='startTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='endTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+</script>
+</body>
+</html>

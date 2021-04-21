@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('参数列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="config-form">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            用户姓名：<input type="text" name="configName"/>
+                        </li>
+                        <li>
+                            用户电话：<input type="text" name="configKey"/>
+                        </li>
+                        <li><!---->
+                            <input type="text" class="time-input" id="chooseTime" placeholder="选择日期"
+                                   name="params[chooseTime]"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <div class="bs-bars pull-left">
+                <button type="button" class="btn btn-warning " id="button-open-1"><i class="fa fa-download"></i> 统计</button>
+            </div>
+
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('biz:register:edit')}]];
+    // var datas = [[${@dict.getType('sys_yes_no')}]];
+    var prefix = ctx + "biz/register";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            exportUrl: prefix + "/export",
+            // sortName: "chooseTime",
+            updateUrl: prefix + "/edit/{id}",
+            sortOrder: "desc",
+            modalName: "参数",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'store_ower',
+                    title: '用户姓名'
+                },
+                {
+                    field: 'store_tel',
+                    title: '用户电话'
+                },
+                {
+                    field: 'user_imports',
+                    title: '登记状态'
+                },
+                {
+                    field: 'configValue',
+                    title: '牛数量'
+                },
+                {
+                    field: 'create_time',
+                    title: '创建时间'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.user_id + row.create_time+'\')"><i class="fa fa-search"></i>查看</a> ');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    var keys = [];//记录输入的数组
+    document.onkeydown=function(event){
+        var e = event || window.event || arguments.callee.caller.arguments[0];
+        if(e.keyCode >= 48 && e.keyCode <= 57 || e.keyCode >= 65 && e.keyCode <= 90 || e.keyCode==13){
+            if(e && e.keyCode==13){ // enter 键
+                //要做的事情
+                /* for (var i = 0; i < keys.length; i++) {
+                       alert(keys[i]);
+                   } */
+                var btn = ['<i class="fa fa-check" onclick=""></i> 确定', '<i class="fa fa-close"></i> 关闭'];
+                var options = {
+                    title: '新增交易信息',
+                    width: "900",
+                    height: "720",
+                    url: prefix + "/toedit1?keys="+keys.join(''),
+                    btn: btn,
+                    callBack: doSubmit1
+                };
+                $.modal.openOptions(options);
+
+                keys.length = 0;
+            }else{
+                keys.push(String.fromCharCode(e.keyCode));
+                console.log(e.keyCode);
+            }
+        }else{
+            setTimeout(function() {
+                $.modal.msgReload("您的卡号不存在！,正在刷新数据请稍后……",modal_status.SUCCESS)
+            }, 2000);
+
+        }
+    };
+    function doSubmit1(index, layero) {
+        //alert("进入了自定义选项提交方法");
+        var body = layer.getChildFrame('body', index);//获取子页面内容
+        var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+        body.find("#btAdd").click();//执行子页面的方法
+    }
+</script>
+
+<script>
+    $("#button-open-1").click(function(){
+        $.modal.open('进出牛市', prefix + "/form");
+    })
+</script>
+</body>
+</html>

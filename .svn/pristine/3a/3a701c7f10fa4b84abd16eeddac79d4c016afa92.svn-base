@@ -1,0 +1,23 @@
+package com.flyroc.ox_online.project.biz.exChange.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.flyroc.ox_online.project.biz.exChange.domain.SelectAll;
+
+/**
+ * 参数配置 数据层
+ * 
+ * @author ruoyi
+ */
+public interface ExchangeMapper{
+	
+	public abstract List<Map> selectAllExchange();
+	
+	public abstract List<Map> selectAllLikeExchange(String opt,String store_ower,String store_tel,String date);
+	
+	public abstract List<Map> selectCount(@Param("newTime1") String newTime1,@Param("newTime2") String newTime2);
+	
+}

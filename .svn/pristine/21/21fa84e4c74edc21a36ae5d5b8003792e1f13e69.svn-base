@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flyroc.ox_online.project.biz.register.mapper.RegisterMapper">
+
+    <resultMap type="Register" id="RegisterResult">
+        <id     property="market_id"        column="market_id"/>
+        <result property="user_id"          column="user_id"/>
+        <result property="deal_id"          column="deal_id"/>
+        <result property="user_imports"     column="user_imports"/>
+        <result property="buy_price"        column="buy_price"/>
+        <result property="sell_tel"         column="sell_tel"/>
+        <result property="sell_way"         column="sell_way"/>
+        <result property="print_status"     column="print_status"/>
+        <result property="service_center"   column="service_center"/>
+        <result property="car_num"          column="car_num"/>
+        <result property="create_time"      column="create_time"/>
+        <result property="num"              column="num"/>
+        <result property="buy_num"          column="buy_num"/>
+        <result property="buy_tel"          column="buy_tel"/>
+        <result property="sell_num"         column="sell_num"/>
+        <result property="sell_price"       column="sell_price"/>
+        <result property="shop_type"        column="shop_type"/>
+        <result property="register_status"  column="register_status"/>
+        <result property="store_ower"       column="store_ower"/>
+    </resultMap>
+
+    <select id="selectTurnoverMassage" parameterType="Register" resultMap="RegisterResult">
+        SELECT
+            m.market_id,
+            m.user_id,
+            s.store_ower,
+            m.sell_tel,
+            m.create_time,
+            m.user_imports
+        FROM
+            hy_market m
+            LEFT JOIN hy_store s ON s.user_id = m.user_id
+        WHERE
+            m.user_imports = '1' or m.user_imports ='4'
+    </select>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

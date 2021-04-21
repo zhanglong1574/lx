@@ -1,0 +1,72 @@
+package com.flyroc.ox_online.project.biz.order.service;
+
+import com.flyroc.ox_online.common.exception.BusinessException;
+import com.flyroc.ox_online.common.utils.text.Convert;
+import com.flyroc.ox_online.framework.aspectj.lang.annotation.DataScope;
+import com.flyroc.ox_online.project.biz.activation.domain.Str;
+import com.flyroc.ox_online.project.biz.order.domain.Order;
+import com.flyroc.ox_online.project.biz.order.mapper.OrderMapper;
+import com.flyroc.ox_online.project.system.post.domain.Post;
+import org.aspectj.weaver.ast.Or;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 用户 业务层处理
+ *
+ * @author ruoyi
+ */
+@Service
+public class OrderServiceImpl implements IOrderService
+{
+    private static final Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
+
+    @Autowired
+    private OrderMapper orderMapper;
+
+    private IOrderService postService;
+
+    /**
+     * 根据条件分页查询用户列表
+     *
+     * @param
+     * @return 用户信息集合信息
+     */
+    @Override
+    public List<Map> selectOrderList(Order order) {
+//        订单状态（1：待处理；2：待确认；3：现场交易；4：已完成；5：申请取消；6：已取消；7：申诉）
+        List<Map> map = orderMapper.selectOrderList(order);
+        for (int i = 0; i < map.size(); i++) {
+            String a = (String) map.get(i).get("order_status");
+            if (a.equals("1")){
+                map.get(i).put("status","待处理");
+            }
+            if (a.equals("2")){
+                map.get(i).put("status","待确认");
+            }
+            if (a.equals("3")){
+                map.get(i).put("status","现场交易");
+            }
+            if (a.equals("4")){
+                map.get(i).put("status","已完成");
+            }
+            if (a.equals("5")){
+                map.get(i).put("status","申请取消");
+            }
+            if (a.equals("6")){
+                map.get(i).put("status","已取消");
+            }
+            if (a.equals("7")){
+                map.get(i).put("status","申诉");
+            }
+        }
+        return map;
+    }
+
+
+}

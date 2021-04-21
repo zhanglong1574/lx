@@ -1,0 +1,8 @@
+package com.flyroc.ox_online.project.biz.register.service;
+
+import com.flyroc.ox_online.project.biz.register.domain.Register;
+
+public interface IRegisterService {
+    public Register selectTurnoverMassage();
+}
+

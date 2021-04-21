@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flyroc.ox_online.project.biz.activation.mapper.ActivationMapper">
+    
+    <resultMap type="Activation" id="ActivationResult">
+    	<id     property="userId"      	  		column="user_id"      />
+        <result property="hyName"    	  		column="hy_name"    />
+        <result property="storeOwer"      		column="store_ower"     />
+        <result property="storeAddress"   		column="store_address"   />
+        <result property="card"    		  		column="card"    />
+        <result property="storeTel"       		column="store_tel"      />
+        <result property="isFreeze"     		column="is_freeze"    />
+        <result property="isActivate"     		column="is_activate"    />
+        <result property="isActivateTime"      column="is_activate_time"      />
+    </resultMap>
+    
+    <sql id="selectHyOxMarketVo">
+        select 
+        	user_id, hy_name, store_ower, store_address,
+        	card, store_tel,is_activate
+        from hy_store
+    </sql>
+    
+    <select id="selectHyOxMarketList" parameterType="Activation" resultMap="ActivationResult">
+       <include refid="selectHyOxMarketVo"/>
+        <where>  
+            <if test="hyName != null  and hyName != ''"> and hy_name like concat('%', #{hyName}, '%')</if>
+            <if test="storeTel != null  and storeTel != ''"> and store_tel = #{storeTel}</if>
+        </where>
+    </select>
+    
+    <select id="selectHyOxMarketById" parameterType="String" resultMap="ActivationResult">
+        select 
+        	user_id, hy_name, store_ower, store_address,
+        	card, store_tel, is_activate, is_freeze
+        from hy_store
+        where
+        	user_id = #{userId}
+    </select>
+
+	<select id="selectHyOxMarketCount" parameterType="java.util.Map" resultType="java.util.Map">
+		select
+			COUNT(is_activate_time) as count,
+			SUBSTRING(is_activate_time,1,10) as time
+		from hy_store
+		where
+			is_activate_time != ""
+		GROUP BY
+			SUBSTRING(is_activate_time,1,10)
+		ORDER BY
+			SUBSTRING(is_activate_time,1,10)
+	</select>
+	
+	<select id="selectHyOxMarketMax" parameterType="java.util.Map" resultType="java.util.Map">
+		select
+			COUNT(is_activate_time) as count,
+			SUBSTRING(is_activate_time,1,10) as time
+		from hy_store
+		where
+			is_activate_time != ""
+		GROUP BY
+			SUBSTRING(is_activate_time,1,10)
+		ORDER BY
+			count DESC
+		limit
+			0,1
+	</select>
+	
+	<select id="selectHyOxMarketMin" parameterType="java.util.Map" resultType="java.util.Map">
+		select
+			COUNT(is_activate_time) as count,
+			SUBSTRING(is_activate_time,1,10) as time
+		from hy_store
+		where
+			is_activate_time != ""
+		GROUP BY
+			SUBSTRING(is_activate_time,1,10)
+		ORDER BY
+			count
+		limit
+			0,1
+	</select>
+    
+</mapper>

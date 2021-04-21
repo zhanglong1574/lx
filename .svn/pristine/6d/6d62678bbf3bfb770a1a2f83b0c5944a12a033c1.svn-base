@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flyroc.ox_online.project.biz.serve.mapper.ServeMapper">
+
+    <resultMap type="Serve" id="ServeResult">
+        <result property="service_center"    	  		column="service_center"    />
+        <result property="market_tel"    	  		column="market_tel"    />
+    </resultMap>
+
+    <sql id="selectServeVo">
+        select id,service_center,address,market_ower,market_tel,location,create_time,full_name,scale,remark
+		from
+		hy_service_center
+    </sql>
+
+    <select id="selectServeList" parameterType="Serve" resultType="java.util.Map">
+        <include refid="selectServeVo"/>
+        <where>
+            <if test="service_center != null and service_center != ''"> and service_center like concat('%', #{service_center}, '%')</if>
+            <if test="market_tel != null and market_tel != ''"> and market_tel like concat('%', #{market_tel}, '%')</if>
+        </where>
+    </select>
+
+    <insert id="insertList" parameterType="Config">
+        insert into hy_service_center (
+        <if test="id != null and id != '' ">id,</if>
+        <if test="address != null and address != '' ">address,</if>
+        <if test="service_center != null and service_center != '' ">service_center,</if>
+        <if test="location != null and location != '' ">location,</if>
+        <if test="full_name != null and full_name != '' ">full_name,</if>
+        <if test="market_address != null and market_address != ''">market_address</if>
+        )values(
+        <if test="id != null and id != ''">#{id},</if>
+        <if test="address != null and address != ''">#{address},</if>
+        <if test="service_center != null and service_center != ''">#{service_center},</if>
+        <if test="location != null and location != ''">#{location},</if>
+        <if test="full_name != null and full_name != ''">#{full_name},</if>
+        <if test="market_address != null and market_address != ''">#{market_address}</if>
+        )
+    </insert>
+</mapper>

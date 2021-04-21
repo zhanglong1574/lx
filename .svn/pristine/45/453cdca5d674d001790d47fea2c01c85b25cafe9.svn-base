@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('新增用户')" />
+</head>
+<body>
+    <div class="main-content">
+        <form id="form-user-add" class="form-horizontal" style="padding : 40px">
+            <div class="row" style="display: flex;">
+            	<div class="col-sm-6" style="margin: 0px auto;">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>品种名：</label>
+                        <div class="col-sm-8">
+                            <input name="varieties_id" placeholder="id" maxlength="30" class="form-control" type="hidden" id="varieties_id">
+                            <input name="varieties_name" placeholder="品种名" maxlength="30" class="form-control" type="text" id="varieties_name">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="display: flex;">
+                <div class="col-sm-6" style="margin: 0px auto;">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "  disabled="disabled">*</span>服务费：</label>
+                        <div class="col-sm-8">
+                            <input name="service_fee" placeholder="服务费" maxlength="30" class="form-control" type="text" id="service_fee">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="display: flex;">
+                <div class="col-sm-6" style="margin: 0px auto;">
+                    <div class="form-group">
+                        <label  disabled="disabled" class="col-sm-4 control-label"><span style="color: red; ">*</span>定金：</label>
+                        <div class="col-sm-8">
+                            <input  name="before_price" placeholder="定金" maxlength="30" class="form-control" type="text" id="before_price">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="button" onclick="listInsert();" id="listInsert" style="display: none">
+        </form>
+    </div>
+	<th:block th:include="include :: footer" />
+	<script type="text/javascript">
+	var prefix = ctx + "biz/varieties";
+	$(function(){
+		$.ajax({
+			url:prefix + "/listFindById",
+    	    dataType:"json",
+    	    type:"get",
+    	    success:function(data){
+    	    	$("#varieties_id").val(data.va.varieties_id);
+    	    	$("#varieties_name").val(data.va.varieties_name);
+    	    	$("#service_fee").val(data.va.service_fee);
+    	    	$("#before_price").val(data.va.before_price);
+    	    }
+		});
+	});
+	
+	function submitHandler() {
+		var varieties_id = $("#varieties_id").val();
+		var varieties_name = $("#varieties_name").val();
+		var service_fee = $("#service_fee").val();
+		var before_price = $("#before_price").val();
+		if(varieties_name.length < 1 || service_fee.length < 1 || before_price.length < 1){
+			$.modal.alertWarning('输入信息不可为空！');
+			return false;
+		}
+		/* var reg = /^\d$/;
+		if(reg.test(service_fee) || reg.test(before_price)){
+			$.modal.alertWarning('请输入纯数字！');
+			return false;
+		} */
+		$.ajax({
+			url:prefix + "/listUpdate",
+    	    dataType:"json",
+    	    type:"get",
+    	    data:{varieties_id:varieties_id,varieties_name:varieties_name,service_fee:service_fee,before_price:before_price},
+    	    success:function(data){
+    	    	$.modal.msgReload("修改成功,正在刷新数据请稍后……", modal_status.SUCCESS);
+    	    }
+		});
+    }
+
+	</script>
+</body>
+</html>

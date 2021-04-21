@@ -1,0 +1,4 @@
+package com.flyroc.ox_online.project.biz.register.service;
+
+public class IRegisterService {
+}

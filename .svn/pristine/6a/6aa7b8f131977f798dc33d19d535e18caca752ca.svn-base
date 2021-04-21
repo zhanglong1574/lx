@@ -1,0 +1,17 @@
+package com.flyroc.ox_online.project.biz.activation.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+/**
+ * 参数配置 信息操作处理
+ * 
+ * @author ruoyi
+ */
+@Controller
+@RequestMapping("/biz/oxMarket")
+public class ActivationController {
+	private String prefix = "system/config";
+	
+	
+}

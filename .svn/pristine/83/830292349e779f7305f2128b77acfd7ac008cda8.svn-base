@@ -1,0 +1,11 @@
+package com.flyroc.ox_online.project.biz.activation.service;
+
+
+/**
+ * 参数配置 服务层
+ * 
+ * @author ruoyi
+ */
+public interface ActivationService{
+   
+}

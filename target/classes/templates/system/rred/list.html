@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('定时任务列表')" />
+</head>
+<body class="gray-bg">
+	<div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="job-form">
+					<div class="select-list">
+						<ul>
+							<li>
+								<input type="hidden" name="store_ower" id="store_ower" maxlength="10"/>
+							</li>
+							<li>
+								牛棚编号：<input type="text" name="byre_id" id="byre_id" maxlength="10"/>
+							</li>
+							<li>
+								所属姓名：<input type="text" name="store_ower" id="store_ower" maxlength="11"/>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+        
+	        <div class="col-sm-12 select-table table-striped">
+			    <table id="bootstrap-table"></table>
+			</div>
+		</div>
+	</div>
+	<th:block th:include="include :: footer" />
+	<script th:inline="javascript">
+	
+        var detailFlag = [[${@permission.hasPermi('ecag:job:detail')}]];
+		var prefix = ctx + "biz/rrecords";
+
+		//查询显示操作
+		$(function() {
+		    var options = {
+		        url: prefix + "/listShow",
+                //updateUrl: prefix + "/selShow/{id}",
+                removeUrl: prefix + "/remove",
+		        sortName: "",
+		        sortOrder: "desc",
+		        modalName: "任务",
+		        columns: [{
+		            checkbox: true
+		        },
+		        {
+		            field: 'record_id',
+		            title: 'id',
+		            visible: false
+		        },
+		        {
+		            field: 'byre_id',
+		            title: '牛棚编号'
+		        },
+		        {
+		            field: 'store_ower',
+		            title: '所属人姓名',
+		        },
+		        {
+		            field: 'store_tel',
+		            title: '所属人电话',
+
+		        },
+		        {
+		            field: 'hsc',
+		            title: '服务中心',
+		        },
+		        {
+		            field: 'start_time',
+		            title: '开始时间',
+		        },
+		        {
+		            field: 'end_time',
+		            title: '结束时间',
+		        },
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		                var actions = [];
+		                actions.push('<a class="btn btn-warning btn-xs ' + detailFlag + '" onclick="listdel(\'' + row.record_id + '\')"><i class="fa fa-search"></i>删除</a> ');
+		                return actions.join('');
+		            }
+		        }]
+		    };
+		    $.table.init(options);
+		});
+		
+		//删除操作
+		function listdel(flag){
+			alert(flag)
+			var prefixShow = ctx + "biz/rrecords";
+			$.modal.confirm("确认要点击确定吗?", function() {
+				
+				$.ajax({
+					url: prefix + "/listdel",
+		    	    dataType:"json",
+		    	    async:true,
+		    	    data:{"record_id":flag},
+		    	    type:"get",
+		    	    success:function(data){
+		    	    	$.modal.msgReload("删除成功,正在刷新数据请稍后……", modal_status.SUCCESS);
+		    	    }
+				});
+	    	});	
+	    }
+		
+
+	</script>
+</body>
+</html>

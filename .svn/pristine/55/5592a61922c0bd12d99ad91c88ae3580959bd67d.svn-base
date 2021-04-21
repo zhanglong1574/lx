@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改交易市场')" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-center-edit" th:object="${hyServiceCenter}">
+        <input name="id" th:field="*{id}" type="hidden">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">交易市场名称：</label>
+            <div class="col-sm-8">
+                <input name="serviceCenter" th:field="*{serviceCenter}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">所在地：</label>
+            <div class="col-sm-8">
+                <input name="address" th:field="*{address}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">负责人：</label>
+            <div class="col-sm-8">
+                <input name="marketOwer" th:field="*{marketOwer}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">联系电话：</label>
+            <div class="col-sm-8">
+                <input name="marketTel" th:field="*{marketTel}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">详细地址：</label>
+            <div class="col-sm-8">
+                <input name="marketAddress" th:field="*{marketAddress}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">位置：</label>
+            <div class="col-sm-8">
+                <input name="location" th:field="*{location}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">面积：</label>
+            <div class="col-sm-8">
+                <input name="area" th:field="*{area}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">全名：</label>
+            <div class="col-sm-8">
+                <input name="fullName" th:field="*{fullName}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">规模：</label>
+            <div class="col-sm-8">
+                <input name="scale" th:field="*{scale}" class="form-control" type="text">
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer" />
+<script type="text/javascript">
+    var prefix = ctx + "biz/oxServiceCenter";
+    $("#form-center-edit").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-center-edit').serialize());
+        }
+    }
+</script>
+</body>
+</html>

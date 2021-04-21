@@ -1,0 +1,99 @@
+package com.flyroc.ox_online.project.biz.exChange.controller;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.alibaba.fastjson.JSONObject;
+import com.flyroc.ox_online.framework.web.controller.BaseController;
+import com.flyroc.ox_online.framework.web.page.TableDataInfo;
+import com.flyroc.ox_online.project.biz.exChange.domain.SelectAll;
+import com.flyroc.ox_online.project.biz.exChange.mapper.ExchangeMapper;
+import com.flyroc.ox_online.project.biz.exChange.service.ExChangeService;
+import com.flyroc.ox_online.project.monitor.online.domain.UserOnline;
+import com.flyroc.ox_online.project.tool.gen.domain.GenTable;
+
+import springfox.documentation.spring.web.json.Json;
+
+/**
+ * 参数配置 信息操作处理
+ * 
+ * @author ruoyi
+ */
+@Controller
+@RequestMapping("/biz")
+public class ExChangeController extends BaseController{
+	private String prefix = "system/ecag";
+	
+	@Autowired
+    private ExChangeService exChangeService;
+	
+	@RequestMapping("/exchange")
+    public String list()
+    {
+        return prefix+"/list";
+    }
+	
+	@RequestMapping("/exchange/listShow")
+	@ResponseBody
+    public TableDataInfo listShow(){
+		startPage();
+		List<Map> lst = exChangeService.selectAll();
+        return getDataTable(lst);
+    }
+	
+	
+	 @RequestMapping("/exchange/listShowLike")
+	 @ResponseBody
+	 public void listShowLike(HttpServletResponse resp,String opt,String store_ower,String store_tel,String date) throws IOException{
+		System.out.println(store_ower);
+		System.out.println(store_ower);
+		 List<Map> lst = exChangeService.selectAllLikeExchange(opt, store_ower, store_tel, date);
+		JSONObject json =new JSONObject();
+		json.put("lst",lst);
+		
+		resp.setCharacterEncoding("utf-8");
+		resp.setContentType("application/json;charset=utf-8");
+		PrintWriter out = null;
+		out = resp.getWriter();
+		out.write(json.toString());
+
+	 }
+	 
+	 @RequestMapping("/exchange/form")
+	 public String form(HttpServletRequest request) throws IOException{
+		 return prefix+"/form";
+	 }
+	 
+	 
+	 @RequestMapping("/exchange/formCount")
+	 public void formCount(HttpServletRequest request,HttpServletResponse resp) throws IOException{
+		 List<Map> lst = exChangeService.selectCount();
+		 JSONObject json =new JSONObject();
+		 json.put("lst",lst);
+		 resp.setCharacterEncoding("utf-8");
+		 resp.setContentType("application/json;charset=utf-8");
+		 PrintWriter out = null;
+		 out = resp.getWriter();
+		 out.write(json.toString());
+	 }
+	 
+	 @RequestMapping("/exchange/print")
+	 public String print(HttpServletRequest request,HttpServletResponse resp) throws IOException{
+		 //创建输入流
+		 return prefix+"/print";
+	 }
+	 
+}

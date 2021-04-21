@@ -1,0 +1,9 @@
+package com.flyroc.ox_online.project.biz.register.mapper;
+
+import com.flyroc.ox_online.project.biz.register.domain.Register;
+
+public interface RegisterMapper {
+    public Register selectTurnoverMassage();
+
+
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.flyroc.ox_online.project.biz.Rrecords.mapper.RrecordsMapper">
+
+	<!-- 显示 -->
+	<select id="selectAll" parameterType="java.lang.String"
+		resultType="java.util.Map">
+		SELECT
+		record_id,
+		byre_id,
+		store_ower,
+		store_tel,
+		hy_service_center.service_center as hsc,
+		start_time,
+		end_time
+		FROM
+		hy_store
+		RIGHT JOIN hy_lease ON hy_lease.user_id = hy_store.user_id
+		LEFT JOIN hy_service_center ON hy_service_center.id =
+		hy_store.service_center
+		where
+		1 = 1
+		<if test="byre_id != null and byre_id != ''">
+			<bind name="byre_id" value="'%'+byre_id+'%'" />
+			AND byre_id LIKE #{byre_id}
+		</if>
+		<if test="store_ower != null and store_ower != ''">
+			<bind name="store_ower" value="'%'+store_ower+'%'" />
+			AND store_ower LIKE #{store_ower}
+		</if>
+	</select>
+
+	<!-- 頁面信息刪除 -->
+	<delete id="listdel" parameterType="java.lang.String">
+		delete from hy_lease where record_id = #{record_id}
+	</delete>
+
+</mapper>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('办卡激活列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>店铺名：</p>
+                                <input type="text" name="hyName"/>
+                            </li>
+                            <li>
+                                <p>店铺电话：</p>
+                                <input type="text" name="storeTel"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i> 搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i> 重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-warning" onclick="edit()" shiro:hasPermission="biz:oxMarket:edit">
+                    <i class="fa fa-download"></i> 统计
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('biz:oxMarket:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('biz:oxMarket:remove')}]];
+        var prefix = ctx + "biz/oxMarket";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add/{id}",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove/{id}",
+                exportUrl: prefix + "/export",
+                modalName: "办卡激活",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'userId', 
+                    title : '主键',
+                    visible: false
+                },
+                {
+                    field : 'hyName', 
+                    title : '店铺名'
+                },
+                {
+                    field : 'storeOwer', 
+                    title : '店主姓名'
+                },
+                {
+                    field : 'storeAddress', 
+                    title : '所在地'
+                },
+                {
+                    field : 'card', 
+                    title : '身份证号'
+                },
+                {
+                    field : 'storeTel', 
+                    title : '店铺电话'
+                },
+                {
+                    field : 'isActivate', 
+                    title : '是否激活，'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.userId + '\')"><i class="fa fa-search"></i>查看</a> ');
+                        if(row.isActivate == "未激活"){
+                            actions.push('<a class="btn btn-warning btn-xs " href="javascript:void(0)" onclick="$.operate.add(\'' + row.userId + '\')"><i class="fa fa-search"></i>激活</a> ');
+                        }
+                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="remove(\'' + row.userId + '\')"><i class="fa fa-search"></i>统计</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+        function edit(){
+        	$.modal.open('统计', prefix + "/statistics");
+        }
+        function remove(id){
+        	$.modal.open('统计', prefix + "/statistics2?userId="+id);
+        }
+        //准备接收子页面传来的参数
+        window.sss = function(a){
+            if (a == 1) {
+            	window.location.reload();
+            }
+        }
+        
+        var str = "";
+		$(document).keydown(function(event) {
+				switch (event.keyCode) {
+				case 65:
+					str += "A"
+					return;
+				case 66:
+					str += "B"
+					return;
+				case 67:
+					str += "C"
+					return;
+				case 68:
+					str += "D"
+					return;
+				case 69:
+					str += "E"
+					return;
+				case 70:
+					str += "F"
+					return;
+				case 71:
+					str += "G"
+					return;
+				case 72:
+					str += "H"
+					return;
+				case 73:
+					str += "I"
+					return;
+				case 74:
+					str += "J"
+					return;
+				case 75:
+					str += "K"
+					return;
+				case 76:
+					str += "L"
+					return;
+				case 77:
+					str += "M"
+					return;
+				case 78:
+					str += "N"
+					return;
+				case 79:
+					str += "O"
+					return;
+				case 80:
+					str += "P"
+					return;
+				case 81:
+					str += "Q"
+					return;
+				case 82:
+					str += "R"
+					return;
+				case 83:
+					str += "S"
+					return;
+				case 84:
+					str += "T"
+					return;
+				case 85:
+					str += "U"
+					return;
+				case 86:
+					str += "V"
+					return;
+				case 87:
+					str += "W"
+					return;
+				case 88:
+					str += "X"
+					return;
+				case 89:
+					str += "Y"
+					return;
+				case 90:
+					str += "Z"
+					return;
+				case 48:
+					str += "0"
+					return;
+				case 49:
+					str += "1"
+					return;
+				case 50:
+					str += "2"
+					return;
+				case 51:
+					str += "3"
+					return;
+				case 52:
+					str += "4"
+					return;
+				case 53:
+					str += "5"
+					return;
+				case 54:
+					str += "6"
+					return;
+				case 55:
+					str += "7"
+					return;
+				case 56:
+					str += "8"
+					return;
+				case 57:
+					str += "9"
+					return;
+				case 96:
+					str += "0"
+					return;
+				case 97:
+					str += "1"
+					return;
+				case 98:
+					str += "2"
+					return;
+				case 99:
+					str += "3"
+					return;
+				case 100:
+					str += "4"
+					return;
+				case 101:
+					str += "5"
+					return;
+				case 102:
+					str += "6"
+					return;
+				case 103:
+					str += "7"
+					return;
+				case 104:
+					str += "8"
+					return;
+				case 105:
+					str += "9"
+					return;
+				case 13:
+					$.ajax({
+						url: prefix + "/pk",
+						type: "POST",
+						async: true,
+						dataType: "json",
+						data:{"cid":str},
+						
+						success: function(msg) {
+							if(msg.a == 1){
+								$.modal.open('新增卡号', prefix + "/add2?str="+str);
+							}else{
+								alert("此卡号已绑定");
+								str = "";
+							}
+						}
+					});
+					
+					return;
+				}
+		});
+        
+    </script>
+</body>
+</html>

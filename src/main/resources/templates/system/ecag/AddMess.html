@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:include="include :: header('新增用户')" />
+</head>
+<body>
+	<div class="main-content">
+		<form id="form-user-add" class="form-horizontal" style="padding: 40px">
+			<div class="row" style="display: flex;">
+				<div class="col-sm-6" style="margin: 0px auto;">
+					<div class="form-group">
+						<label class="col-sm-4 control-label"><span
+							style="color: red;">*</span>手机号：</label>
+						<div class="col-sm-8">
+							<input name="phonenumber" placeholder="手机号" class="form-control"
+								type="text" id="store_tel" readonly="readonly">
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6" style="margin: 0px auto;">
+					<div class="form-group">
+						<label class="col-sm-4 control-label"><span
+							style="color: red;">*</span>姓名：</label>
+						<div class="col-sm-8">
+							<input name="phonenumber" placeholder="姓名" class="form-control"
+								type="text" id="store_ower" readonly="readonly">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label"><span
+							style="color: red;" readonly="readonly">*</span>身份证：</label>
+						<div class="col-sm-8">
+							<input name="phonenumber" placeholder="总人数" class="form-control"
+								type="text" id="card" readonly="readonly">
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label"><span
+							style="color: red;" readonly="readonly">*</span>所在地：</label>
+						<div class="col-sm-8">
+							<input name="email" class="form-control" type="text"
+								placeholder="进场头数" id="store_address" readonly="readonly">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label readonly="readonly" class="col-sm-4 control-label"><span
+							style="color: red;">*</span>卡号：</label>
+						<div class="col-sm-8">
+							<input name="loginName" placeholder="交易总数" class="form-control"
+								type="text" id="card_id" readonly="readonly">
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label"><span
+							style="color: red;" readonly="readonly">*</span>总服务费：</label>
+						<div class="col-sm-8">
+							<input name="phonenumber" placeholder="总服务费" class="form-control"
+								type="text" id="byzr" readonly="readonly">
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label"><span
+							style="color: red;" readonly="readonly">*</span>应付金额：</label>
+						<div class="col-sm-8">
+							<input name="email" class="form-control" type="text"
+								placeholder="应付金额" id="bymm" readonly="readonly">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label"><span
+							style="color: red;" readonly="readonly">*</span>买家电话：</label>
+						<div class="col-sm-8">
+							<input name="phonenumber" placeholder="买家电话" class="form-control"
+								type="text" id="sell_tel">
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label"><span
+							style="color: red;" readonly="readonly">*</span>买家姓名：</label>
+						<div class="col-sm-8">
+							<input name="email" class="form-control" type="text"
+								placeholder="买家姓名" id="byst" readonly="readonly">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row" id="caseRow1" call="caseRow1">
+				<div class="col-sm-6" style="width: 32%">
+					<div class="form-group">
+						<label class="col-sm-4 control-label"><span
+							style="color: red;" readonly="readonly">*</span>品种：</label>
+						<div class="col-sm-8">
+							<select class="form-control" id="varieties_name"
+								onchange="vnAc();">
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6" style="width: 32%">
+					<div class="form-group">
+						<label class="col-sm-4 control-label"><span
+							style="color: red;" readonly="readonly">*</span>数量：</label>
+						<div class="col-sm-8">
+							<input name="email" class="form-control" type="number"
+								placeholder="数量" id="bynm" onchange="fieBynm();">
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6" style="width: 32%">
+					<div class="form-group">
+						<label class="col-sm-4 control-label"><span
+							style="color: red;" readonly="readonly">*</span>服务费：</label>
+						<div class="col-sm-8">
+							<input name="email" class="form-control" type="text"
+								placeholder="服务费" id="byvr" readonly="readonly">
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6" style="width: 3%">
+					<div class="form-group">
+						<div class="col-sm-8">
+							<input type="button" value="+" id="btry" onclick="addbtry();">
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</form>
+		<input type="text" id="user_id" style="display: none"> <input
+			type="text" id="service_center" style="display: none"> <input
+			type="text" id="car_num" style="display: none"> <input
+			type="text" id="cardCopy" style="display: none"> <input
+			type="text" id="bystID" style="display: none"> <input
+			type="button" id="btAdd" onclick="btAdd();" style="display: none">
+	</div>
+	<th:block th:include="include :: footer" />
+	<script type="text/javascript">
+		var prefix = ctx + "biz/exchange";
+		//判断电话号是否存在
+		$("#sell_tel").blur(function() {
+			var tel = $("#sell_tel").val();
+			$.ajax({
+				url : prefix + "/Pefsell_tel/?tel=" + tel,
+				dataType : "json",
+				type : "get",
+				success : function(data) {
+					if (data.boo == true) {
+						$("#sell_tel").val("");
+						$.modal.alertWarning('您输入的电话号码奴存在！');
+					} else {
+						$("#byst").val(data.lst[0]['store_ower']);
+						$("#cardCopy").val(data.lst[0]['card_id']);
+						$("#bystID").val(data.lst[0]['user_id']);
+					}
+				}
+			});
+		});
+
+		//初始化加载页面
+		$(function() {
+			$
+					.ajax({
+						url : prefix + "/AddMesss",
+						dataType : "json",
+						type : "get",
+						success : function(data) {
+							if (data.boo) {
+								$("#user_id").val(data.lst1[0]['user_id']);
+								$("#store_tel").val(data.lst1[0]['store_tel']);
+								$("#store_ower")
+										.val(data.lst1[0]['store_ower']);
+								$("#card").val(data.lst1[0]['card']);
+								$("#store_address").val(
+										data.lst1[0]['store_address']);
+								$("#card_id").val(data.lst1[0]['card_id']);
+								$("#service_center").val(
+										data.lst1[0]['service_center']);
+								$("#car_num").val(data.lst1[0]['car_num']);
+
+								for (var i = 0; i < data.lst2.length; i++) {
+									$("#varieties_name")
+											.append(
+													'<option value="789" acid="'+data.lst2[i]['varieties_id']+'" acc1="'+data.lst2[i]['service_fee']+'"  acc2="'+data.lst2[i]['before_price']+'">'
+															+ data.lst2[i]['varieties_name']
+															+ '</option>')
+								}
+							} else {
+								//错误刷卡报错
+								$.modal.alertWarning('您的卡号奴存在！');
+								setTimeout(function() {
+									$.modal.msgReload(modal_status.SUCCESS)
+								}, 2000);
+							}
+						}
+					});
+
+		});
+
+		//select改变联动
+		function vnAc() {
+			var acc1 = $("#varieties_name").find("option:selected")
+					.attr("acc1");
+			var acc2 = $("#varieties_name").find("option:selected")
+					.attr("acc2");
+			$("#byvr").val($("#bynm").val() * acc1);
+			$("#byzr").val($("#bynm").val() * acc1);
+			$("#bymm").val($("#bynm").val() * acc2);
+		}
+		//数字改变联动
+		function fieBynm() {
+			if ($("#bynm").val() <= 0) {
+				$("#bynm").val("");
+				$.modal.alertWarning('请输入大于0的整数！');
+				return false;
+			}
+
+			var acc1 = $("#varieties_name").find("option:selected")
+					.attr("acc1");
+			var acc2 = $("#varieties_name").find("option:selected")
+					.attr("acc2");
+
+			$("#byvr").val($("#bynm").val() * acc1);
+			$("#byzr").val($("#bynm").val() * acc1);
+			$("#bymm").val($("#bynm").val() * acc2);
+		}
+
+		//提交事件
+		function btAdd() {
+			if ($("#sell_tel").val() == null || $("#sell_tel").val() == "") {
+				$.modal.alertWarning('请填写手机号！');
+				return false;
+			}
+			if ($("#bynm").val() == null || $("#bynm").val() == "") {
+				$.modal.alertWarning('请输入数量！');
+				return false;
+			}
+
+			var user_id = $("#user_id").val(); //用户id
+			var byzr = $("#byzr").val(); //服务综费
+			var bymm = $("#bymm").val(); //应付金额
+			var sell_tel = $("#sell_tel").val(); //买家电话
+			var byst = $("#byst").val(); //买家姓名
+			var acid = $("#varieties_name").find("option:selected")
+					.attr("acid");
+			var acname = $("#varieties_name").find("option:selected").html();//品种name
+			var bynm = $("#bynm").val(); //数量
+			var byvr = $("#byvr").val(); //服务费
+			var cardCopy = $("#cardCopy").val(); //服务费
+
+			var store_tel = $("#store_tel").val(); //卖家电话
+			var store_ower = $("#store_ower").val(); //卖家姓名
+			var card = $("#card").val(); //身份证
+			var store_address = $("#store_address").val(); //地址
+			var card_id = $("#card_id").val(); //卡号
+			var service_center = $("#service_center").val(); //服务中心
+			var car_num = $("#car_num").val(); //车牌号
+			var bystID = $("#bystID").val(); //车牌号
+
+			var prefixShow = ctx + "biz/exchange/btAdd?user_id=" + user_id
+					+ "&byzr=" + byzr + "&bymm=" + bymm + "&sell_tel="
+					+ sell_tel + "&byst=" + byst + "&acid=" + acid + "&bynm="
+					+ bynm + "&byvr=" + byvr + "&store_tel=" + store_tel
+					+ "&store_ower=" + store_ower + "&card=" + card
+					+ "&store_address=" + store_address + "&card_id=" + card_id
+					+ "&service_center=" + service_center + "&car_num="
+					+ car_num + "&cardCopy=" + cardCopy + "&acname=" + acname
+					+ "&bystID=" + bystID;
+			var btn = [ '<i class="fa fa-check" onclick="print();"></i> 打印',
+					'<i class="fa fa-close"></i> 关闭' ];
+			var options = {
+				title : '交易凭证打印',
+				width : "700",
+				height : "520",
+				url : prefixShow,
+				btn : btn,
+				callBack : doSubmit
+			};
+			$.modal.openOptions(options);
+		}
+
+		function doSubmit(index, layero) {
+			//alert("进入了自定义选项提交方法");
+			var body = layer.getChildFrame('body', index);//获取子页面内容
+			var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+			body.find("#prt").click();//执行子页面的方法
+		}
+	</script>
+</body>
+</html>

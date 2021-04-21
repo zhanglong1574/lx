@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flyroc.ox_online.project.biz.varieties.mapper.HyVarietiesMapper">
+    
+    <resultMap type="HyVarieties" id="HyVarietiesResult">
+        <result property="varietiesId"    column="varieties_id"    />
+        <result property="varietiesName"    column="varieties_name"    />
+        <result property="serviceFee"    column="service_fee"    />
+        <result property="beforePrice"    column="before_price"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectHyVarietiesVo">
+        select varieties_id, varieties_name, service_fee, before_price, create_time from hy_varieties
+    </sql>
+
+    <select id="selectHyVarietiesList" parameterType="HyVarieties" resultMap="HyVarietiesResult">
+        <include refid="selectHyVarietiesVo"/>
+        <where>  
+            <if test="varietiesId != null  and varietiesId != ''"> and varieties_id = #{varietiesId}</if>
+            <if test="varietiesName != null  and varietiesName != ''"> and varieties_name like concat('%', #{varietiesName}, '%')</if>
+            <if test="serviceFee != null  and serviceFee != ''"> and service_fee = #{serviceFee}</if>
+            <if test="beforePrice != null  and beforePrice != ''"> and before_price = #{beforePrice}</if>
+        </where>
+    </select>
+    
+    <select id="selectHyVarietiesById" parameterType="String" resultMap="HyVarietiesResult">
+        <include refid="selectHyVarietiesVo"/>
+        where varieties_id = #{varietiesId}
+    </select>
+        
+    <insert id="insertHyVarieties" parameterType="HyVarieties">
+        insert into hy_varieties
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="varietiesId != null  and varietiesId != ''">varieties_id,</if>
+            <if test="varietiesName != null  and varietiesName != ''">varieties_name,</if>
+            <if test="serviceFee != null  and serviceFee != ''">service_fee,</if>
+            <if test="beforePrice != null  and beforePrice != ''">before_price,</if>
+            <if test="createTime != null ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="varietiesId != null  and varietiesId != ''">#{varietiesId},</if>
+            <if test="varietiesName != null  and varietiesName != ''">#{varietiesName},</if>
+            <if test="serviceFee != null  and serviceFee != ''">#{serviceFee},</if>
+            <if test="beforePrice != null  and beforePrice != ''">#{beforePrice},</if>
+            <if test="createTime != null ">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHyVarieties" parameterType="HyVarieties">
+        update hy_varieties
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="varietiesName != null  and varietiesName != ''">varieties_name = #{varietiesName},</if>
+            <if test="serviceFee != null  and serviceFee != ''">service_fee = #{serviceFee},</if>
+            <if test="beforePrice != null  and beforePrice != ''">before_price = #{beforePrice},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </trim>
+        where varieties_id = #{varietiesId}
+    </update>
+
+    <delete id="deleteHyVarietiesById" parameterType="String">
+        delete from hy_varieties where varieties_id = #{varietiesId}
+    </delete>
+
+    <delete id="deleteHyVarietiesByIds" parameterType="String">
+        delete from hy_varieties where varieties_id in 
+        <foreach item="varietiesId" collection="array" open="(" separator="," close=")">
+            #{varietiesId}
+        </foreach>
+    </delete>
+    
+</mapper>
